@@ -8,5 +8,6 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/coverage": true
-  }
+  },
+  "markdown.validate.enabled": true
 }
