@@ -9,5 +9,6 @@
     "**/node_modules": true,
     "**/coverage": true
   },
-  "markdown.validate.enabled": true
+  "markdown.validate.enabled": true,
+  "chat.permissions.default": "autoApprove"
 }
