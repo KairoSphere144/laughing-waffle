@@ -2,71 +2,55 @@
 
 Industrial intelligence and trade operations workspace. The initial operating market is Suriname, with an architecture intended to support international trade workflows over time.
 
-## Current build: foundation preview
+## Current build: authenticated foundation
 
-This first vertical slice provides:
-- A responsive operations dashboard.
-- An opportunity pipeline with stage and currency labels.
-- Input validation and separate USD/SRD totals (currencies are never combined).
-- A zero-dependency domain layer and Node.js automated tests.
-- GitHub Actions CI for pushes and pull requests.
-- Shared Visual Studio Code workspace configuration.
-
-The included records are illustrative. New records are held in application memory for the current browser session only; refreshing the page clears them. This preview has no authentication, backend, database, or external integrations. Do not enter confidential, personal, client, supplier, or payment information.
+- Responsive operations dashboard with USD and SRD totals kept separate.
+- Supabase email/password sign-up and sign-in, email verification, and session restoration.
+- Authenticated create, read, update, and delete operations for opportunities.
+- Opportunity validation in the shared domain layer.
+- Row-level security policies constrain records to their owning account.
+- Node.js tests cover domain logic and the Supabase data adapter.
 
 ## Requirements
 
-- Node.js 20 or later for the test suite.
-- Visual Studio Code (recommended) or another editor.
-- A modern browser to view the application.
+- Node.js 20.19 or later.
+- A Supabase project with the `public.opportunities` migration applied.
 
-## Connect GitHub to Visual Studio Code
+## Configure and run locally
 
-1. Install Visual Studio Code and the Git command-line tools.
-2. Open VS Code and install/sign in to the **GitHub Pull Requests** extension if you want to manage pull requests from the editor. GitHub authentication is handled through VS Code's Accounts menu.
-3. Open the Command Palette and choose **Git: Clone**.
-4. Paste the repository URL: `https://github.com/KairoSphere144/laughing-waffle.git`.
-5. Choose a local folder, then open the cloned `laughing-waffle` workspace.
-6. Switch to the `main` branch for the current integrated foundation.
+1. Copy `.env.example` to `.env.local`.
+2. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` using the Supabase project URL and publishable key from project API settings. Browser code must only use the publishable key; never use a `service_role` or secret key.
+3. Enable email/password authentication in Supabase. Add the local Vite URL, usually `http://localhost:5173`, to the allowed redirect URLs for email verification.
+4. Run `npm install` and `npm run dev`, then open the local URL Vite prints.
+5. Run `npm test` for tests and `npm run build` to produce a production bundle.
 
-The repository includes `.vscode/` workspace settings, a recommended Live Server extension, a test task, and a browser-debug launch configuration. VS Code will prompt to install the recommended extension.
+The `.env.local` file is ignored by Git. The app uses the Supabase publishable key in browser code and never uses a service-role or secret key. A migration revokes direct execute permission on the internal `rls_auto_enable()` event-trigger function from API roles; the trigger behavior is unchanged.
 
-## Run locally
+## GitHub Pages deployment
 
-- In VS Code, open `index.html`.
-- Start **Live Server** using the status-bar action or the editor context menu.
-- The launch configuration expects the preview at `http://127.0.0.1:5500`.
-- Run **Terminal → Run Task → KairoSphere: run tests**, or execute `npm test` in the integrated terminal.
+The Pages workflow builds and tests the Vite app on pushes to `main`. Add the following repository Actions variables under **Settings → Secrets and variables → Actions → Variables** before deployment:
 
-No application dependencies are required. Node.js 20+ is needed for tests.
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+
+Set the Supabase Auth redirect allowlist to include `https://kairosphere144.github.io/laughing-waffle/` and the local Vite URL (`http://localhost:5173/`).
 
 ## Structure
 
 ```text
 .
-├── .github/workflows/ci.yml
-├── .vscode/
-│   ├── extensions.json
-│   ├── launch.json
-│   ├── settings.json
-│   └── tasks.json
 ├── index.html
 ├── src/
 │   ├── app.js
 │   ├── domain.js
-│   └── styles.css
+│   ├── opportunities.js
+│   ├── styles.css
+│   └── supabase.js
+├── supabase/migrations/
 ├── tests/
-│   └── domain.test.js
+│   ├── domain.test.js
+│   └── opportunities.test.js
 └── package.json
 ```
 
-## Planned milestones
-
-1. Foundation and architecture validation.
-2. Secure application backend, authentication, database, and operations dashboard.
-3. Industrial goods catalog and CRM.
-4. Market intelligence, source attribution, and commercial calculations.
-5. Quotations, invoices, and payment/settlement recordkeeping.
-6. Security hardening, integration testing, deployment preparation, and documentation.
-
-Financial functions are recordkeeping and analysis only; the application must not execute financial transactions. Live data must be source-attributed and distinguish verified, estimated, sample, and user-entered values.
+Financial functions are recordkeeping and analysis only; the application does not execute financial transactions. Live data must be source-attributed and distinguish verified, estimated, sample, and user-entered values.
