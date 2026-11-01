@@ -10,34 +10,46 @@ This first vertical slice provides:
 - Input validation and separate USD/SRD totals (currencies are never combined).
 - A zero-dependency domain layer and Node.js automated tests.
 - GitHub Actions CI for pushes and pull requests.
+- Shared Visual Studio Code workspace configuration.
 
 The included records are illustrative. New records are held in application memory for the current browser session only; refreshing the page clears them. This preview has no authentication, backend, database, or external integrations. Do not enter confidential, personal, client, supplier, or payment information.
 
 ## Requirements
 
 - Node.js 20 or later for the test suite.
+- Visual Studio Code (recommended) or another editor.
 - A modern browser to view the application.
+
+## Connect GitHub to Visual Studio Code
+
+1. Install Visual Studio Code and the Git command-line tools.
+2. Open VS Code and install/sign in to the **GitHub Pull Requests** extension if you want to manage pull requests from the editor. GitHub authentication is handled through VS Code's Accounts menu.
+3. Open the Command Palette and choose **Git: Clone**.
+4. Paste the repository URL: `https://github.com/KairoSphere144/laughing-waffle.git`.
+5. Choose a local folder, then open the cloned `laughing-waffle` workspace.
+6. Switch to the `main` branch for the current integrated foundation.
+
+The repository includes `.vscode/` workspace settings, a recommended Live Server extension, a test task, and a browser-debug launch configuration. VS Code will prompt to install the recommended extension.
 
 ## Run locally
 
-Serve the repository root with any static HTTP server, then open the local address in a browser. For example:
+- In VS Code, open `index.html`.
+- Start **Live Server** using the status-bar action or the editor context menu.
+- The launch configuration expects the preview at `http://127.0.0.1:5500`.
+- Run **Terminal → Run Task → KairoSphere: run tests**, or execute `npm test` in the integrated terminal.
 
-```sh
-npx serve .
-```
-
-Run automated tests:
-
-```sh
-npm test
-```
-
-No application dependencies are required.
+No application dependencies are required. Node.js 20+ is needed for tests.
 
 ## Structure
 
 ```text
 .
+├── .github/workflows/ci.yml
+├── .vscode/
+│   ├── extensions.json
+│   ├── launch.json
+│   ├── settings.json
+│   └── tasks.json
 ├── index.html
 ├── src/
 │   ├── app.js
@@ -45,9 +57,7 @@ No application dependencies are required.
 │   └── styles.css
 ├── tests/
 │   └── domain.test.js
-└── .github/
-    └── workflows/
-        └── ci.yml
+└── package.json
 ```
 
 ## Planned milestones
