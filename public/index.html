@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b2a">
+  <meta name="description" content="KairoSphere industrial intelligence and trade operations workspace.">
+  <title>KairoSphere | Operations</title>
+  <link rel="stylesheet" href="./src/styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="KairoSphere home"><span class="brand-mark">K</span><span>KairoSphere</span></a>
+    <span class="environment"><span class="status-dot"></span> DEVICE PREVIEW</span>
+  </header>
+  <main class="shell">
+    <section class="welcome">
+      <div><p class="eyebrow">INDUSTRIAL INTELLIGENCE · TRADE OPERATIONS</p><h1>Operations overview</h1><p class="subheading">A clear view of opportunities and the work moving them forward.</p></div>
+      <div class="date-chip" id="today-label">Workspace preview</div>
+    </section>
+    <aside class="notice" role="note"><strong>Prototype mode</strong><span>Illustrative sample records only. Changes stay in this browser session and are cleared on refresh. Do not enter confidential client, supplier, payment, or personal data.</span></aside>
+    <section class="metrics" aria-label="Pipeline summary">
+      <article class="metric-card"><span class="metric-label">Open opportunities</span><strong id="metric-count">—</strong><span class="metric-foot">Active pipeline</span></article>
+      <article class="metric-card"><span class="metric-label">Estimated pipeline</span><strong id="metric-value">—</strong><span class="metric-foot">Illustrative values only</span></article>
+      <article class="metric-card"><span class="metric-label">Next action</span><strong id="metric-next">—</strong><span class="metric-foot">Open follow-ups</span></article>
+    </section>
+    <section class="workspace-grid">
+      <article class="panel opportunities-panel"><div class="panel-heading"><div><p class="eyebrow">COMMERCIAL PIPELINE</p><h2>Opportunities</h2></div><span class="count-pill" id="opportunity-count">0 records</span></div>
+        <div class="table-wrap"><table><thead><tr><th scope="col">Opportunity</th><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Data</th></tr></thead><tbody id="opportunity-rows"><tr><td colspan="4" class="empty-state">Loading workspace…</td></tr></tbody></table></div>
+      </article>
+      <article class="panel form-panel"><div class="panel-heading"><div><p class="eyebrow">QUICK CAPTURE</p><h2>Add opportunity</h2></div></div>
+        <form id="opportunity-form">
+          <label for="opportunity-name">Opportunity name</label><input id="opportunity-name" name="name" maxlength="80" required placeholder="e.g. Industrial pump supply">
+          <label for="opportunity-stage">Pipeline stage</label><select id="opportunity-stage" name="stage"><option value="lead">Lead</option><option value="qualified">Qualified</option><option value="proposal">Proposal</option><option value="negotiation">Negotiation</option></select>
+          <div class="field-row"><div><label for="opportunity-amount">Estimated value</label><input id="opportunity-amount" name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div><div><label for="opportunity-currency">Currency</label><select id="opportunity-currency" name="currency"><option value="USD">USD</option><option value="SRD">SRD</option></select></div></div>
+          <button type="submit">Add to pipeline <span aria-hidden="true">→</span></button><p class="form-feedback" id="form-feedback" aria-live="polite"></p>
+        </form>
+      </article>
+    </section>
+    <footer><span>KairoSphere · Foundation build</span><span>Device preview · No external integrations</span></footer>
+  </main>
+</body>
+</html>
