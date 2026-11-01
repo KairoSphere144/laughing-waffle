@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#101b2a">
   <meta name="description" content="KairoSphere industrial intelligence and trade operations workspace.">
   <title>KairoSphere | Operations</title>
-  <link rel="stylesheet" href="./src/styles.css">
-  <script type="module" src="./src/app.js"></script>
+  <link rel="stylesheet" href="/src/styles.css">
+  <script type="module" src="/src/app.js"></script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="./" aria-label="KairoSphere home"><span class="brand-mark">K</span><span>KairoSphere</span></a>
-    <span class="environment"><span class="status-dot"></span> LOCAL PREVIEW</span>
+    <div class="account-bar"><span class="environment"><span class="status-dot"></span> PRIVATE WORKSPACE</span><span id="auth-user"></span><button id="sign-out" type="button" hidden>Sign out</button></div>
   </header>
   <main class="shell">
     <section class="welcome">
@@ -24,18 +24,28 @@
       <div class="date-chip" id="today-label">Workspace preview</div>
     </section>
 
-    <aside class="notice" role="note">
-      <strong>Prototype mode</strong>
-      <span>Illustrative sample records only. Changes stay in this browser session and are cleared on refresh. Do not enter confidential client, supplier, payment, or personal data.</span>
+    <aside class="notice" role="note" id="workspace-notice">
+      <strong>Private workspace</strong>
+      <span>Sign in to view and manage your opportunities. Each account can access only its own records.</span>
     </aside>
 
-    <section class="metrics" aria-label="Pipeline summary">
+    <section class="panel auth-panel" id="auth-panel" aria-labelledby="auth-heading">
+      <div class="panel-heading"><div><p class="eyebrow">SECURE ACCESS</p><h2 id="auth-heading">Sign in to KairoSphere</h2></div></div>
+      <form id="auth-form">
+        <label for="auth-email">Email</label><input id="auth-email" name="email" type="email" autocomplete="email" required>
+        <label for="auth-password">Password</label><input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+        <div class="auth-actions"><button type="submit" id="auth-submit">Sign in</button><button type="button" class="secondary-button" id="auth-mode">Create account</button></div>
+        <p class="form-feedback" id="auth-feedback" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="metrics authenticated-content" aria-label="Pipeline summary" hidden>
       <article class="metric-card"><span class="metric-label">Open opportunities</span><strong id="metric-count">—</strong><span class="metric-foot">Active pipeline</span></article>
-      <article class="metric-card"><span class="metric-label">Estimated pipeline</span><strong id="metric-value">—</strong><span class="metric-foot">Illustrative values only</span></article>
+      <article class="metric-card"><span class="metric-label">Estimated pipeline</span><strong id="metric-value">—</strong><span class="metric-foot">USD and SRD totals shown separately</span></article>
       <article class="metric-card"><span class="metric-label">Next action</span><strong id="metric-next">—</strong><span class="metric-foot">Open follow-ups</span></article>
     </section>
 
-    <section class="workspace-grid">
+    <section class="workspace-grid authenticated-content" hidden>
       <article class="panel opportunities-panel">
         <div class="panel-heading">
           <div><p class="eyebrow">COMMERCIAL PIPELINE</p><h2>Opportunities</h2></div>
@@ -43,8 +53,8 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th scope="col">Opportunity</th><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Data</th></tr></thead>
-            <tbody id="opportunity-rows"><tr><td colspan="4" class="empty-state">Loading workspace…</td></tr></tbody>
+            <thead><tr><th scope="col">Opportunity</th><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Data</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="opportunity-rows"><tr><td colspan="5" class="empty-state">Loading workspace…</td></tr></tbody>
           </table>
         </div>
       </article>
@@ -67,7 +77,7 @@
         </form>
       </article>
     </section>
-    <footer><span>KairoSphere · Foundation build</span><span>Local preview · No external integrations</span></footer>
+    <footer><span>KairoSphere · Foundation build</span><span>Authenticated Supabase workspace</span></footer>
   </main>
 </body>
 </html>
