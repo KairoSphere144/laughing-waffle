@@ -19,16 +19,14 @@
       <div>
         <p class="eyebrow">INDUSTRIAL INTELLIGENCE · TRADE OPERATIONS</p>
         <h1>Operations overview</h1>
-        <p class="subheading">A clear view of opportunities and the work moving them forward.</p>
+        <p class="subheading">Capture real client problems, qualify opportunities and track the next useful action.</p>
       </div>
       <div class="date-chip" id="today-label">Workspace preview</div>
     </section>
-
     <aside class="notice" role="note" id="workspace-notice">
       <strong>Private workspace</strong>
       <span>Sign in to view and manage your opportunities. Each account can access only its own records.</span>
     </aside>
-
     <section class="panel auth-panel" id="auth-panel" aria-labelledby="auth-heading">
       <div class="panel-heading"><div><p class="eyebrow">SECURE ACCESS</p><h2 id="auth-heading">Sign in to KairoSphere</h2></div></div>
       <form id="auth-form">
@@ -38,13 +36,11 @@
         <p class="form-feedback" id="auth-feedback" aria-live="polite"></p>
       </form>
     </section>
-
     <section class="metrics authenticated-content" aria-label="Pipeline summary" hidden>
       <article class="metric-card"><span class="metric-label">Open opportunities</span><strong id="metric-count">—</strong><span class="metric-foot">Active pipeline</span></article>
       <article class="metric-card"><span class="metric-label">Estimated pipeline</span><strong id="metric-value">—</strong><span class="metric-foot">USD and SRD totals shown separately</span></article>
-      <article class="metric-card"><span class="metric-label">Next action</span><strong id="metric-next">—</strong><span class="metric-foot">Open follow-ups</span></article>
+      <article class="metric-card"><span class="metric-label">Follow-ups</span><strong id="metric-next">—</strong><span class="metric-foot">Opportunities with a next follow-up date</span></article>
     </section>
-
     <section class="workspace-grid authenticated-content" hidden>
       <article class="panel opportunities-panel">
         <div class="panel-heading">
@@ -53,31 +49,49 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th scope="col">Opportunity</th><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Data</th><th scope="col">Actions</th></tr></thead>
+            <thead><tr><th scope="col">Opportunity / problem</th><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Intake</th><th scope="col">Actions</th></tr></thead>
             <tbody id="opportunity-rows"><tr><td colspan="5" class="empty-state">Loading workspace…</td></tr></tbody>
           </table>
         </div>
       </article>
-
       <article class="panel form-panel">
-        <div class="panel-heading"><div><p class="eyebrow">QUICK CAPTURE</p><h2>Add opportunity</h2></div></div>
+        <div class="panel-heading"><div><p class="eyebrow">PROBLEM-FIRST CAPTURE</p><h2>Add opportunity</h2></div></div>
         <form id="opportunity-form">
-          <label for="opportunity-name">Opportunity name</label>
-          <input id="opportunity-name" name="name" maxlength="80" required placeholder="e.g. Industrial pump supply">
-          <label for="opportunity-stage">Pipeline stage</label>
-          <select id="opportunity-stage" name="stage">
-            <option value="lead">Lead</option><option value="qualified">Qualified</option><option value="proposal">Proposal</option><option value="negotiation">Negotiation</option>
-          </select>
+          <label for="opportunity-name">Opportunity title *</label>
+          <input id="opportunity-name" name="name" maxlength="80" required placeholder="e.g. Parts catalogue data cleanup">
+          <label for="opportunity-organization">Organization / business</label>
+          <input id="opportunity-organization" name="organization" maxlength="160" placeholder="Name as supplied by the prospect">
+          <label for="opportunity-contact">Contact reference</label>
+          <input id="opportunity-contact" name="contactName" maxlength="120" placeholder="Name or role; leave blank if unknown">
+          <label for="opportunity-source">Lead source</label>
+          <input id="opportunity-source" name="leadSource" maxlength="160" placeholder="Referral, website, email, event…">
+          <label for="opportunity-problem">Client-stated problem</label>
+          <textarea id="opportunity-problem" name="problemStatement" rows="3" placeholder="Record what the prospect actually said."></textarea>
+          <label for="opportunity-process">Current process</label>
+          <textarea id="opportunity-process" name="currentProcess" rows="2" placeholder="How is the work handled today?"></textarea>
+          <label for="opportunity-impact">Business impact</label>
+          <textarea id="opportunity-impact" name="businessImpact" rows="2" placeholder="Cost, delay, errors, lost visibility… unknown is acceptable."></textarea>
           <div class="field-row">
-            <div><label for="opportunity-amount">Estimated value</label><input id="opportunity-amount" name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div>
+            <div><label for="opportunity-urgency">Urgency</label><select id="opportunity-urgency" name="urgency"><option value="unknown">Unknown</option><option value="low">Low</option><option value="normal">Normal</option><option value="high">High</option><option value="critical">Critical</option></select></div>
+            <div><label for="opportunity-duration">Need type</label><select id="opportunity-duration" name="problemDuration"><option value="unknown">Unknown</option><option value="one_off">One-off</option><option value="recurring">Recurring</option></select></div>
+          </div>
+          <label for="opportunity-outcome">Desired outcome</label>
+          <textarea id="opportunity-outcome" name="desiredOutcome" rows="2" placeholder="What result does the prospect want?"></textarea>
+          <label for="opportunity-followup">Next follow-up date</label>
+          <input id="opportunity-followup" name="nextFollowUp" type="date">
+          <label for="opportunity-stage">Pipeline stage</label>
+          <select id="opportunity-stage" name="stage"><option value="lead">Lead</option><option value="qualified">Qualified</option><option value="proposal">Proposal</option><option value="negotiation">Negotiation</option></select>
+          <div class="field-row">
+            <div><label for="opportunity-amount">Estimated value (optional)</label><input id="opportunity-amount" name="amount" type="number" min="0.01" step="0.01" placeholder="Leave blank if unknown"></div>
             <div><label for="opportunity-currency">Currency</label><select id="opportunity-currency" name="currency"><option value="USD">USD</option><option value="SRD">SRD</option></select></div>
           </div>
-          <button type="submit">Add to pipeline <span aria-hidden="true">→</span></button>
+          <button type="submit">Save opportunity <span aria-hidden="true">→</span></button>
           <p class="form-feedback" id="form-feedback" aria-live="polite"></p>
+          <p class="form-note">Unknown facts can remain blank. Never invent client needs, budgets or deadlines.</p>
         </form>
       </article>
     </section>
-    <footer><span>KairoSphere · Foundation build</span><span>Authenticated Supabase workspace</span></footer>
+    <footer><span>KairoSphere · Opportunity intake increment</span><span>Authenticated Supabase workspace</span></footer>
   </main>
 </body>
 </html>
