@@ -38,6 +38,7 @@ test("rejects invalid stages, non-positive values, unsupported currencies and in
   assert.throws(() => createOpportunity({ name: "Valid", amount: "", urgency: "urgent" }), /urgency/i);
   assert.throws(() => createOpportunity({ name: "Valid", amount: "", problemDuration: "forever" }), /duration/i);
   assert.throws(() => createOpportunity({ name: "Valid", amount: "", nextFollowUp: "tomorrow" }), /follow-up date/i);
+  assert.throws(() => createOpportunity({ name: "Valid", amount: "", nextFollowUp: "2026-02-30" }), /follow-up date/i);
 });
 
 test("summarizes USD and SRD independently without mixing currencies or counting unknown values", () => {
