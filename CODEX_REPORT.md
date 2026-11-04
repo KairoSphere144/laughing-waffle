@@ -83,3 +83,12 @@ No tests or builds were run during this inspection-only baseline. Do not interpr
 - The initial PR CI run on commit `342e8c9` completed successfully. A subsequent small edit made the pipeline stage editable; its CI run must be checked separately.
 - The Supabase migration has not been applied. Live authentication and two-user RLS verification remain outstanding.
 - The edit interaction currently uses browser prompts and should be replaced with an accessible in-page editor before production use.
+
+
+## Current branch state — 2026-11-04
+
+- Latest feature work is on the dedicated draft branch and PR #9 remains open as a draft.
+- Pull-request CI now installs locked dependencies, runs `npm test`, and runs `npm run build`.
+- Follow-up dates are validated against actual calendar dates; a regression test covers an impossible date.
+- The earlier CI run passed unit tests before the build step was added. The latest branch head still requires its full test-and-build run to complete.
+- No Supabase migration has been applied and no public deployment has been triggered.
