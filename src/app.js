@@ -15,6 +15,7 @@ const elements = {
 };
 const authenticatedContent = [...document.querySelectorAll(".authenticated-content")];
 const stageLabels = { lead: "Lead", qualified: "Qualified", proposal: "Proposal", negotiation: "Negotiation" };
+const urgencyLabels = { unknown: "Unknown", low: "Low", normal: "Normal", high: "High", critical: "Critical" };
 
 function feedback(element, message, kind = "") {
   element.textContent = message;
@@ -49,7 +50,7 @@ function render() {
   const summary = summarizePipeline(opportunities);
   elements.count.textContent = String(summary.count);
   elements.value.textContent = `${formatMoney(summary.totals.USD, "USD")} USD · ${formatMoney(summary.totals.SRD, "SRD")} SRD`;
-  elements.next.textContent = String(opportunities.filter(item => item.stage !== "negotiation").length);
+  elements.next.textContent = String(opportunities.filter(item => item.nextFollowUp).length);
   elements.recordCount.textContent = `${summary.count} record${summary.count === 1 ? "" : "s"}`;
   elements.table.replaceChildren();
   if (!opportunities.length) {
@@ -69,13 +70,30 @@ function render() {
     const value = document.createElement("td");
     const status = document.createElement("td");
     const actions = document.createElement("td");
-    name.textContent = item.name;
+    const title = document.createElement("strong");
+    title.textContent = item.name;
+    name.append(title);
+    if (item.organization) {
+      const org = document.createElement("small");
+      org.className = "row-subtext";
+      org.textContent = item.organization;
+      name.append(org);
+    }
+    if (item.problemStatement) {
+      const problem = document.createElement("small");
+      problem.className = "row-subtext";
+      problem.textContent = item.problemStatement;
+      name.append(problem);
+    }
     const stageBadge = document.createElement("span");
     stageBadge.className = `stage stage-${item.stage}`;
     stageBadge.textContent = stageLabels[item.stage];
     stage.append(stageBadge);
     value.textContent = formatMoney(item.amount, item.currency);
-    status.innerHTML = '<span class="data-tag data-user">Private</span>';
+    const dataTag = document.createElement("span");
+    dataTag.className = item.problemStatement ? "data-tag data-user" : "data-tag";
+    dataTag.textContent = item.problemStatement ? "Problem captured" : "Intake incomplete";
+    status.append(dataTag);
     const edit = document.createElement("button");
     edit.type = "button"; edit.className = "row-action"; edit.textContent = "Edit";
     edit.addEventListener("click", () => void editOpportunity(item));
@@ -88,20 +106,38 @@ function render() {
   }
 }
 
+function askValue(label, currentValue) {
+  return prompt(label, currentValue ?? "");
+}
+
 async function editOpportunity(item) {
-  const name = prompt("Opportunity name", item.name);
-  if (name === null) return;
-  const stage = prompt("Stage (lead, qualified, proposal, negotiation)", item.stage);
-  if (stage === null) return;
-  const amount = prompt("Estimated value", String(item.amount));
-  if (amount === null) return;
-  const currency = prompt("Currency (USD or SRD)", item.currency);
-  if (currency === null) return;
+  const fields = [
+    ["name", "Opportunity name", item.name],
+    ["organization", "Organization", item.organization],
+    ["contactName", "Contact name", item.contactName],
+    ["leadSource", "Lead source", item.leadSource],
+    ["problemStatement", "Client-stated problem", item.problemStatement],
+    ["currentProcess", "Current process", item.currentProcess],
+    ["businessImpact", "Business impact", item.businessImpact],
+    ["urgency", "Urgency (unknown, low, normal, high, critical)", item.urgency],
+    ["problemDuration", "Problem duration (unknown, one_off, recurring)", item.problemDuration],
+    ["desiredOutcome", "Desired outcome", item.desiredOutcome],
+    ["nextFollowUp", "Next follow-up date (YYYY-MM-DD)", item.nextFollowUp],
+    ["amount", "Estimated value (leave blank if unknown)", item.amount],
+    ["currency", "Currency (USD or SRD)", item.currency]
+  ];
+  const changes = {};
+  for (const [key, label, value] of fields) {
+    const answer = askValue(label, value);
+    if (answer === null) return;
+    changes[key] = answer;
+  }
   try {
-    const valid = createOpportunity({ ...item, name, stage, amount, currency });
+    const valid = createOpportunity({ ...item, ...changes });
     const saved = await updateUserOpportunity(supabase, item.id, valid);
     opportunities = opportunities.map(record => record.id === item.id ? saved : record);
     render();
+    feedback(elements.feedback, "Opportunity intake updated.", "success");
   } catch (error) { feedback(elements.feedback, error.message, "error"); }
 }
 
@@ -120,11 +156,16 @@ elements.form.addEventListener("submit", async event => {
   const formData = new FormData(elements.form);
   try {
     const opportunity = await createUserOpportunity(supabase, currentUser.id, {
-      name: formData.get("name"), stage: formData.get("stage"), amount: formData.get("amount"), currency: formData.get("currency")
+      name: formData.get("name"), stage: formData.get("stage"), amount: formData.get("amount"), currency: formData.get("currency"),
+      organization: formData.get("organization"), contactName: formData.get("contactName"), leadSource: formData.get("leadSource"),
+      problemStatement: formData.get("problemStatement"), currentProcess: formData.get("currentProcess"),
+      businessImpact: formData.get("businessImpact"), urgency: formData.get("urgency"),
+      problemDuration: formData.get("problemDuration"), desiredOutcome: formData.get("desiredOutcome"),
+      nextFollowUp: formData.get("nextFollowUp")
     });
     opportunities = [opportunity, ...opportunities];
     render(); elements.form.reset();
-    feedback(elements.feedback, "Opportunity saved to your account.", "success");
+    feedback(elements.feedback, "Opportunity and intake details saved to your account.", "success");
   } catch (error) { feedback(elements.feedback, error.message, "error"); }
 });
 
