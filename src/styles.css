@@ -91,3 +91,8 @@ footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 2
 .row-action { font-size: .8rem; margin-right: .35rem; }
 .row-action.danger { color: #ffaaa4; }
 button:disabled { opacity: .65; cursor: wait; }
+
+textarea { width: 100%; min-height: 72px; padding: 10px 11px; color: #edf3f8; background: #0c1724; border: 1px solid #30445a; border-radius: 7px; font: inherit; font-size: 12px; line-height: 1.5; resize: vertical; }
+textarea:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+.row-subtext { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; font-weight: 400; white-space: normal; }
+.form-note { color: var(--muted); font-size: 10px; line-height: 1.45; margin: 0; }
