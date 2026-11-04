@@ -11,7 +11,10 @@ function optionalText(value, field, maxLength = 2000) {
 function optionalDate(value) {
   const date = String(value ?? "").trim();
   if (!date) return null;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(`${date}T00:00:00Z`))) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("Enter a valid follow-up date.");
+  const [year, month, day] = date.split("-").map(Number);
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) {
     throw new Error("Enter a valid follow-up date.");
   }
   return date;
