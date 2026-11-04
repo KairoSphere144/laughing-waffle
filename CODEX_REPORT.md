@@ -71,3 +71,15 @@ No tests or builds were run during this inspection-only baseline. Do not interpr
 ## 8. Change log
 
 - 2026-11-04 — Created this report on a dedicated non-production branch from the inspected `main` commit. No application code, database migrations, deployment settings, repository permissions, or production branch contents were changed.
+
+
+## Implementation update — 2026-11-04
+
+- Draft PR #9: https://github.com/KairoSphere144/laughing-waffle/pull/9
+- Dedicated branch: `project-management/codex-report-2026-11-04`
+- Added structured opportunity intake fields and optional estimated value.
+- Added the matching database migration, form, validation, persistence mapping, and unit tests.
+- Existing user-owned RLS policies were left unchanged.
+- The initial PR CI run on commit `342e8c9` completed successfully. A subsequent small edit made the pipeline stage editable; its CI run must be checked separately.
+- The Supabase migration has not been applied. Live authentication and two-user RLS verification remain outstanding.
+- The edit interaction currently uses browser prompts and should be replaced with an accessible in-page editor before production use.
