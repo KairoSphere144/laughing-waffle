@@ -113,6 +113,7 @@ function askValue(label, currentValue) {
 async function editOpportunity(item) {
   const fields = [
     ["name", "Opportunity name", item.name],
+    ["stage", "Stage (lead, qualified, proposal, negotiation)", item.stage],
     ["organization", "Organization", item.organization],
     ["contactName", "Contact name", item.contactName],
     ["leadSource", "Lead source", item.leadSource],
