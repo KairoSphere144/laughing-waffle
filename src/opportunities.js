@@ -1,7 +1,7 @@
 import { createOpportunity } from "./domain.js";
 
 const TABLE = "opportunities";
-const COLUMNS = "id,name,stage,amount,currency,organization,contact_name,lead_source,problem_statement,current_process,business_impact,urgency,problem_duration,desired_outcome,next_follow_up,created_at";
+const COLUMNS = "id,name,stage,amount,currency,organization,contact_name,lead_source,problem_statement,current_process,business_impact,urgency,problem_duration,desired_outcome,received_date,next_follow_up,created_at";
 
 function unwrap(result) {
   if (result.error) throw result.error;
@@ -24,6 +24,7 @@ function fromRow(row) {
     urgency: row.urgency,
     problemDuration: row.problem_duration,
     desiredOutcome: row.desired_outcome,
+    receivedDate: row.received_date,
     nextFollowUp: row.next_follow_up
   });
 }
@@ -43,6 +44,7 @@ function toRow(valid) {
     urgency: valid.urgency,
     problem_duration: valid.problemDuration,
     desired_outcome: valid.desiredOutcome,
+    received_date: valid.receivedDate,
     next_follow_up: valid.nextFollowUp
   };
 }
