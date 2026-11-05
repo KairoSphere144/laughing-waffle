@@ -92,3 +92,24 @@ No tests or builds were run during this inspection-only baseline. Do not interpr
 - Follow-up dates are validated against actual calendar dates; a regression test covers an impossible date.
 - The earlier CI run passed unit tests before the build step was added. The latest branch head still requires its full test-and-build run to complete.
 - No Supabase migration has been applied and no public deployment has been triggered.
+
+
+## Review remediation — 2026-11-05
+
+Codex review of PR #9 at commit `07c3606` identified three usability/data-completeness findings:
+- Prospect-received date was not distinct from database row creation time.
+- Editing required a sequence of browser prompts, unsuitable for long-form/mobile intake.
+- Full problem statements could dominate narrow pipeline rows.
+
+Changes committed to the PR branch:
+- Added optional `received_date` to the intake form, domain validation, Supabase adapter mapping, and migration.
+- Replaced serial prompts with a single responsive native dialog containing the same labeled intake fields; cancel leaves the record unchanged.
+- Limited the pipeline-row problem excerpt to 120 characters while retaining the complete text as the element title.
+- Added received-date validation and persistence tests.
+- No RLS policy, live database, deployment configuration, or production data was changed.
+
+Verification:
+- The previous PR head `07c3606` had a successful GitHub Actions run for `npm ci`, `npm test`, and `npm run build`.
+- The remediation head is `e888f547315b36d1449e233c7225d120fc6fa269`; a fresh CI run has not yet been returned at the time of this report.
+- The Supabase migration remains unapplied. Authenticated CRUD and two-user RLS isolation remain unverified against the live project.
+- PR #9 remains a draft and has not been merged or deployed.
