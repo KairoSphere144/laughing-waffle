@@ -15,7 +15,7 @@ function optionalDate(value, field = "date") {
   const [year, month, day] = date.split("-").map(Number);
   const parsed = new Date(Date.UTC(year, month - 1, day));
   if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) {
-    throw new Error("Enter a valid follow-up date.");
+    throw new Error(`Enter a valid ${field}.`);
   }
   return date;
 }
