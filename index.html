@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101b2a">
-  <meta name="description" content="KairoSphere industrial intelligence and trade operations workspace.">
-  <title>KairoSphere | Operations</title>
+  <meta name="description" content="KairoSphere industrial operations, inventory and trade workspace.">
+  <title>KairoSphere | Industrial Operations</title>
   <link rel="stylesheet" href="/src/styles.css">
   <script type="module" src="/src/app.js"></script>
 </head>
@@ -17,16 +17,16 @@
   <main class="shell">
     <section class="welcome">
       <div>
-        <p class="eyebrow">INDUSTRIAL INTELLIGENCE · TRADE OPERATIONS</p>
-        <h1>Operations overview</h1>
-        <p class="subheading">A clear view of opportunities and the work moving them forward.</p>
+        <p class="eyebrow">INDUSTRIAL INTELLIGENCE · RESOURCE OPERATIONS</p>
+        <h1>Operations control</h1>
+        <p class="subheading">A connected view of stock, warehouse activity and commercial work.</p>
       </div>
       <div class="date-chip" id="today-label">Workspace preview</div>
     </section>
 
     <aside class="notice" role="note" id="workspace-notice">
       <strong>Private workspace</strong>
-      <span>Sign in to view and manage your opportunities. Each account can access only its own records.</span>
+      <span>Sign in to manage your company's operational records. Each organization is isolated from other customers.</span>
     </aside>
 
     <section class="panel auth-panel" id="auth-panel" aria-labelledby="auth-heading">
@@ -39,45 +39,109 @@
       </form>
     </section>
 
-    <section class="metrics authenticated-content" aria-label="Pipeline summary" hidden>
-      <article class="metric-card"><span class="metric-label">Open opportunities</span><strong id="metric-count">—</strong><span class="metric-foot">Active pipeline</span></article>
-      <article class="metric-card"><span class="metric-label">Estimated pipeline</span><strong id="metric-value">—</strong><span class="metric-foot">USD and SRD totals shown separately</span></article>
-      <article class="metric-card"><span class="metric-label">Next action</span><strong id="metric-next">—</strong><span class="metric-foot">Open follow-ups</span></article>
+    <section class="panel setup-panel" id="organization-setup" hidden>
+      <p class="eyebrow">FIRST-TIME SETUP</p>
+      <h2>Register your organization</h2>
+      <p class="muted">Create the private company workspace that will own its warehouses, product catalogue and stock ledger.</p>
+      <form id="organization-form">
+        <label for="organization-name">Company or organization name</label>
+        <input id="organization-name" name="name" maxlength="120" required placeholder="Your business name">
+        <button type="submit">Create company workspace</button>
+        <p class="form-feedback" id="organization-feedback" aria-live="polite"></p>
+      </form>
     </section>
 
-    <section class="workspace-grid authenticated-content" hidden>
-      <article class="panel opportunities-panel">
-        <div class="panel-heading">
-          <div><p class="eyebrow">COMMERCIAL PIPELINE</p><h2>Opportunities</h2></div>
-          <span class="count-pill" id="opportunity-count">0 records</span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th scope="col">Opportunity</th><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Data</th><th scope="col">Actions</th></tr></thead>
-            <tbody id="opportunity-rows"><tr><td colspan="5" class="empty-state">Loading workspace…</td></tr></tbody>
-          </table>
-        </div>
-      </article>
+    <section id="workspace-content" hidden>
+      <div class="organization-bar">
+        <div><span class="metric-label">ACTIVE ORGANIZATION</span><strong id="organization-label">—</strong></div>
+        <label class="organization-switch-label" for="organization-select">Workspace</label>
+        <select id="organization-select" aria-label="Select organization"></select>
+      </div>
+      <nav class="view-tabs" aria-label="Operations sections">
+        <button type="button" class="view-tab active" data-view="inventory">Inventory & warehouse</button>
+        <button type="button" class="view-tab" data-view="pipeline">Commercial pipeline</button>
+      </nav>
 
-      <article class="panel form-panel">
-        <div class="panel-heading"><div><p class="eyebrow">QUICK CAPTURE</p><h2>Add opportunity</h2></div></div>
-        <form id="opportunity-form">
-          <label for="opportunity-name">Opportunity name</label>
-          <input id="opportunity-name" name="name" maxlength="80" required placeholder="e.g. Industrial pump supply">
-          <label for="opportunity-stage">Pipeline stage</label>
-          <select id="opportunity-stage" name="stage">
-            <option value="lead">Lead</option><option value="qualified">Qualified</option><option value="proposal">Proposal</option><option value="negotiation">Negotiation</option>
-          </select>
-          <div class="field-row">
-            <div><label for="opportunity-amount">Estimated value</label><input id="opportunity-amount" name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div>
-            <div><label for="opportunity-currency">Currency</label><select id="opportunity-currency" name="currency"><option value="USD">USD</option><option value="SRD">SRD</option></select></div>
-          </div>
-          <button type="submit">Add to pipeline <span aria-hidden="true">→</span></button>
-          <p class="form-feedback" id="form-feedback" aria-live="polite"></p>
-        </form>
-      </article>
+      <section id="view-inventory" class="view-panel">
+        <div class="section-intro">
+          <div><p class="eyebrow">WAREHOUSE CONTROL</p><h2>Inventory position</h2><p class="muted">Stock on hand is calculated from the immutable movement ledger.</p></div>
+          <span class="count-pill" id="inventory-status">Live records</span>
+        </div>
+        <section class="metrics" aria-label="Inventory summary">
+          <article class="metric-card"><span class="metric-label">Active SKUs</span><strong id="inventory-skus">—</strong><span class="metric-foot">Distinct products in stock ledger</span></article>
+          <article class="metric-card"><span class="metric-label">Warehouses</span><strong id="inventory-warehouses">—</strong><span class="metric-foot">Active locations</span></article>
+          <article class="metric-card"><span class="metric-label">Low-stock lines</span><strong id="inventory-low">—</strong><span class="metric-foot">At or below reorder point</span></article>
+        </section>
+
+        <div class="inventory-forms">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">LOCATION MASTER</p><h2>Add warehouse</h2></div></div>
+            <form id="warehouse-form">
+              <label for="warehouse-code">Warehouse code</label><input id="warehouse-code" name="code" maxlength="24" required placeholder="MAIN">
+              <label for="warehouse-name">Warehouse name</label><input id="warehouse-name" name="name" maxlength="100" required placeholder="Main warehouse">
+              <label for="warehouse-location">Location / zone</label><input id="warehouse-location" name="location" maxlength="120" placeholder="Optional">
+              <button type="submit">Save warehouse</button><p class="form-feedback" id="warehouse-feedback" aria-live="polite"></p>
+            </form>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">PRODUCT MASTER</p><h2>Add product</h2></div></div>
+            <form id="product-form">
+              <label for="product-sku">SKU / item code</label><input id="product-sku" name="sku" maxlength="64" required placeholder="PUMP-001">
+              <label for="product-name">Product name</label><input id="product-name" name="name" maxlength="160" required placeholder="Industrial pump">
+              <div class="field-row"><div><label for="product-unit">Unit</label><input id="product-unit" name="unit" maxlength="24" value="each" required></div><div><label for="product-reorder">Reorder point</label><input id="product-reorder" name="reorderPoint" type="number" min="0" step="0.001" value="0" required></div></div>
+              <div class="field-row"><div><label for="product-cost">Unit cost</label><input id="product-cost" name="unitCost" type="number" min="0" step="0.01" value="0" required></div><div><label for="product-currency">Currency</label><select id="product-currency" name="costCurrency"><option value="SRD">SRD</option><option value="USD">USD</option></select></div></div>
+              <button type="submit">Save product</button><p class="form-feedback" id="product-feedback" aria-live="polite"></p>
+            </form>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">STOCK LEDGER</p><h2>Record movement</h2></div></div>
+            <form id="movement-form">
+              <label for="movement-warehouse">Warehouse</label><select id="movement-warehouse" name="warehouseId" required></select>
+              <label for="movement-product">Product</label><select id="movement-product" name="productId" required></select>
+              <label for="movement-type">Movement type</label><select id="movement-type" name="movementType"><option value="receipt">Receipt / stock in</option><option value="issue">Issue / stock out</option><option value="adjustment">Adjustment (+ or −)</option></select>
+              <label for="movement-quantity">Quantity</label><input id="movement-quantity" name="quantity" type="number" step="0.001" required placeholder="Enter positive quantity">
+              <label for="movement-reference">Reference</label><input id="movement-reference" name="reference" maxlength="100" placeholder="Delivery note / order / count">
+              <label for="movement-notes">Notes</label><input id="movement-notes" name="notes" maxlength="500" placeholder="Optional context">
+              <button type="submit">Post stock movement</button><p class="form-feedback" id="movement-feedback" aria-live="polite"></p>
+            </form>
+          </article>
+        </div>
+
+        <article class="panel table-panel">
+          <div class="panel-heading"><div><p class="eyebrow">CURRENT POSITION</p><h2>Stock by warehouse</h2></div><span class="count-pill" id="balance-count">0 lines</span></div>
+          <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Product</th><th>Warehouse</th><th>On hand</th><th>Reorder point</th><th>Status</th></tr></thead><tbody id="balance-rows"><tr><td colspan="6" class="empty-state">Loading inventory…</td></tr></tbody></table></div>
+        </article>
+        <article class="panel table-panel">
+          <div class="panel-heading"><div><p class="eyebrow">AUDIT TRAIL</p><h2>Recent stock movements</h2></div><span class="count-pill">Latest 30</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Time</th><th>Type</th><th>Quantity delta</th><th>Reference</th><th>Notes</th></tr></thead><tbody id="movement-rows"><tr><td colspan="5" class="empty-state">Loading ledger…</td></tr></tbody></table></div>
+        </article>
+      </section>
+
+      <section id="view-pipeline" class="view-panel" hidden>
+        <div class="section-intro"><div><p class="eyebrow">COMMERCIAL PIPELINE</p><h2>Business opportunities</h2><p class="muted">Track prospective work separately from operational stock records.</p></div><span class="count-pill" id="opportunity-count">0 records</span></div>
+        <section class="metrics" aria-label="Pipeline summary">
+          <article class="metric-card"><span class="metric-label">Open opportunities</span><strong id="metric-count">—</strong><span class="metric-foot">Active pipeline</span></article>
+          <article class="metric-card"><span class="metric-label">Estimated pipeline</span><strong id="metric-value">—</strong><span class="metric-foot">USD and SRD totals shown separately</span></article>
+          <article class="metric-card"><span class="metric-label">Next action</span><strong id="metric-next">—</strong><span class="metric-foot">Open follow-ups</span></article>
+        </section>
+        <div class="workspace-grid">
+          <article class="panel opportunities-panel">
+            <div class="panel-heading"><div><p class="eyebrow">PIPELINE RECORDS</p><h2>Opportunities</h2></div></div>
+            <div class="table-wrap"><table><thead><tr><th>Opportunity</th><th>Stage</th><th>Value</th><th>Data</th><th>Actions</th></tr></thead><tbody id="opportunity-rows"><tr><td colspan="5" class="empty-state">Loading opportunities…</td></tr></tbody></table></div>
+          </article>
+          <article class="panel form-panel">
+            <div class="panel-heading"><div><p class="eyebrow">QUICK CAPTURE</p><h2>Add opportunity</h2></div></div>
+            <form id="opportunity-form">
+              <label for="opportunity-name">Opportunity name</label><input id="opportunity-name" name="name" maxlength="80" required placeholder="e.g. Industrial pump supply">
+              <label for="opportunity-stage">Pipeline stage</label><select id="opportunity-stage" name="stage"><option value="lead">Lead</option><option value="qualified">Qualified</option><option value="proposal">Proposal</option><option value="negotiation">Negotiation</option></select>
+              <div class="field-row"><div><label for="opportunity-amount">Estimated value</label><input id="opportunity-amount" name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div><div><label for="opportunity-currency">Currency</label><select id="opportunity-currency" name="currency"><option value="USD">USD</option><option value="SRD">SRD</option></select></div></div>
+              <button type="submit">Add to pipeline</button><p class="form-feedback" id="form-feedback" aria-live="polite"></p>
+            </form>
+          </article>
+        </div>
+      </section>
     </section>
-    <footer><span>KairoSphere · Foundation build</span><span>Authenticated Supabase workspace</span></footer>
+    <footer><span>KairoSphere · Industrial operations foundation</span><span>Authenticated · Organization-scoped · Ledger-based stock</span></footer>
   </main>
 </body>
 </html>
