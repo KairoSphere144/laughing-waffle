@@ -32,5 +32,11 @@ test("summarizes distinct SKUs, warehouses, low stock and total units", () => {
     { product_id: "p1", warehouse_id: "w1", quantity_on_hand: 2, reorder_point: 3 },
     { product_id: "p2", warehouse_id: "w1", quantity_on_hand: 8, reorder_point: 2 },
     { product_id: "p1", warehouse_id: "w2", quantity_on_hand: 4, reorder_point: 3 }
-  ]), { skuCount: 2, warehouseCount: 2, lowStockCount: 1, unitsOnHand: 14 });
+  ]), { skuCount: 2, warehouseCount: 2, lowStockCount: 1, negativeStockCount: 0, unitsOnHand: 14 });
+});
+
+test("does not classify a zero reorder threshold as a low-stock alert", () => {
+  assert.equal(summarizeInventory([
+    { product_id: "p1", warehouse_id: "w1", quantity_on_hand: 0, reorder_point: 0 }
+  ]).lowStockCount, 0);
 });
