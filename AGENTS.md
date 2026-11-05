@@ -82,9 +82,9 @@ Build a dependable operational workspace, not a decorative demo.
 
 Do not claim to have communicated with another agent or person unless a verifiable tool action confirms it. This file is a persistent hand-off brief; it does not itself dispatch a Codex task or send a notification.
 
-## 5. Current technical baseline
+## 5. Current technical baseline and branch scope
 
-The repository README describes an authenticated Vite + Supabase foundation with:
+The **intended production baseline on `main`** is the authenticated Vite + Supabase foundation described in the root README:
 - Responsive operations dashboard.
 - Supabase email/password authentication and session restoration.
 - Authenticated opportunity CRUD.
@@ -93,7 +93,9 @@ The repository README describes an authenticated Vite + Supabase foundation with
 - Node.js tests for domain logic and the Supabase adapter.
 - GitHub Pages build/deployment configuration.
 
-Respect the existing architecture. Inspect the actual source, migrations, tests, workflows, and current branch before making assumptions. Browser code may use only the Supabase publishable key; never expose a service-role key or other secret. Do not weaken RLS or database permissions to make a feature work.
+This describes the `main` baseline; it does not guarantee that every branch contains those features. At the start of each task, inspect the checked-out branch, README, package scripts, source, workflows, tests, migrations, and current commit. Treat the actual checkout as the implementation baseline. If it is a static preview or otherwise differs from `main`, record the differences and follow the explicitly selected milestone; do not assume the branches are already integrated or silently import the other branch's architecture.
+
+Respect the architecture that is actually present on the selected branch. Browser code may use only the Supabase publishable key; never expose a service-role key or other secret. Do not weaken RLS or database permissions to make a feature work.
 
 Financial functionality is recordkeeping and analysis only unless a separately approved scope explicitly changes that. Do not implement payment execution, trading, custody, or money movement as an assumed feature.
 
@@ -134,17 +136,44 @@ Financial functionality is recordkeeping and analysis only unless a separately a
    - Clearly label estimates, confirmed values, and missing information.
    - Optimize the main workflows for mobile.
 
-### Acceptance criteria for this milestone
+### Staged acceptance criteria
 
-- A user can create and update an opportunity with validated fields.
-- A problem can be classified as temporary or recurring without forcing an unsupported assumption.
-- A solution can be scoped with deliverables and acceptance criteria.
-- Tasks/follow-ups can be linked to the opportunity and surfaced on the dashboard.
-- Data remains isolated to the authenticated owner under RLS.
-- Tests cover validation, lifecycle transitions, and persistence behavior.
-- The frontend handles loading, empty, success, and error states.
-- `npm test` and `npm run build` pass, or any failure is reported with reproducible detail.
-- No secrets, client data, or unapproved external commitments are introduced.
+Complete one stage at a time. Keep each implementation change reviewable, attach its evidence, and do not begin a later stage while the current stage has an unresolved acceptance failure.
+
+**Stage 0 — implementation readiness**
+- Record the exact branch and commit, current app architecture, opportunity data model, persistence/authentication, RLS, tests, and deployment workflow.
+- Identify existing work and PRs that affect the next stage; verify current CI/build evidence for the exact commit.
+- State the single smallest unblocked implementation stage and any required configuration or migration review.
+- Do not claim readiness if the branch or target environment is unknown.
+
+**Stage 1 — opportunity intake**
+- A user can create and update an opportunity with validated intake fields.
+- Client-stated facts, internal analysis, estimates, and unknown information remain distinguishable; do not fabricate missing values.
+- A prospect can have multiple distinct opportunities.
+- Validation, lifecycle, and persistence behavior have tests. Authenticated branches also verify owner isolation under RLS.
+- The UI provides loading, empty, success, and error states.
+
+**Stage 2 — problem and solution scope**
+- An opportunity can record temporary or recurring need, proposed intervention, deliverables, exclusions, dependencies, risks, effort estimate, acceptance criteria, and verification evidence.
+- Client-stated facts remain distinct from internal analysis and assumptions.
+- Tests cover validation and persistence of the scope fields.
+
+**Stage 3 — tasks and milestones**
+- Tasks and milestones link to an opportunity and record owner, status, due date, dependencies, and completion evidence.
+- The interface makes the next action and overdue work clear.
+- Tests cover linking, status changes, due-date behavior, and authorization where applicable.
+
+**Stage 4 — follow-up and delivery record**
+- Contact history, next follow-up, decisions, open questions, and delivery/handover evidence can be recorded.
+- External communications remain drafts unless separately authorized.
+- Tests cover persistence and access controls.
+
+**Stage 5 — operational dashboard**
+- The dashboard surfaces actionable pipeline stages, overdue follow-ups, upcoming tasks, active delivery, and verified outcomes.
+- USD and SRD remain separate; estimates, confirmed values, and missing data are clearly identified.
+- Core workflows remain usable on mobile and have relevant UI and data tests.
+
+For every code stage, run `npm test` and `npm run build` against the exact reviewed commit, or report reproducible failures. Never introduce secrets, real client data, or unapproved external commitments.
 
 ## 6A. Extended product build route — operational core to industrial platform
 
@@ -257,3 +286,4 @@ If client outreach reveals a new requirement, record the requirement as a candid
 ## 9. Milestone history
 
 - 2026-11-03 — Established this repository-level agent brief. Next engineering priority: inspect the authenticated foundation and implement the client problem-to-solution operating workflow in small, tested increments. No implementation milestone is claimed complete by this instruction-file change.
+- 2026-11-05 — Clarified that the Vite + Supabase description is the intended `main` baseline and that agents must inspect the checked-out branch before implementation. Split the problem-to-solution milestone into readiness, intake, solution scope, tasks/milestones, follow-up/delivery, and dashboard stages with separate acceptance criteria. No application feature or deployment is claimed complete by this instruction update.
