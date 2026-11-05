@@ -212,3 +212,22 @@ For every proposed paid service or device, record:
 This document does not claim that a cloud worker, queue, webhook receiver, AI API, storage backup policy, monitoring service, 24/7 uptime, paid customer, applied migration, or live integration exists. Those are explicit implementation milestones requiring evidence.
 
 **Architecture principle:** Build a small reliable operating system that compounds verified business value. Add autonomy only where permissions, data quality, observability and recovery are strong enough to support it.
+
+
+## 12. Participant and workforce capacity
+
+KairoSphere must support controlled capacity expansion through paid participants where approved work and funding justify it. The dedicated operating specification is [docs/PARTICIPANT_WORKFORCE_MANAGEMENT.md](PARTICIPANT_WORKFORCE_MANAGEMENT.md).
+
+The workforce domain connects approved opportunities and delivery plans to work packages, candidate assessment, engagements, assignments, milestones, compensation obligations, payment evidence and access lifecycle. It is a separate access-controlled domain; participant and compensation data must not be exposed through ordinary opportunity permissions.
+
+Implementation order:
+1. Finish and verify the existing opportunity-to-delivery workflow and tenant/ownership model.
+2. Define the legal engagement and jurisdiction review checklist.
+3. Implement work packages, participant records, engagement approvals and assignments using synthetic test data.
+4. Add milestone/time evidence and independent acceptance.
+5. Add compensation obligations and payment tracking, keeping currencies separate.
+6. Evaluate a payout provider only after jurisdiction eligibility, fees, KYC, security and user approval are established.
+
+Recruitment must not begin without an approved work package and budget. No work commitment may exceed its authorized cap. A deliverable submitter cannot be the sole approver of their own payment. Payment obligation, payment instruction and confirmed settlement are distinct states. Actual money movement remains outside this initial scope and requires separate authorization.
+
+This workforce capability is a planned expansion, not a claim that recruitment, payroll, contractor onboarding, or payouts are already implemented.
