@@ -76,8 +76,7 @@ async function refreshWorkspace() {
     renderOrganizationSelector();
     await Promise.all([refreshInventory(), refreshOpportunities()]);
   } catch (error) {
-    feedback(elements.setupFeedback, `Could not load your organization: ${error.message}`, "error");
-    elements.setup.hidden = false;
+    feedback(elements.authFeedback, `Could not load the workspace: ${error.message}`, "error");
   }
 }
 
@@ -132,7 +131,7 @@ function renderSelect(select, records, placeholder, label) {
 
 function renderInventory() {
   const summary = summarizeInventory(balances);
-  elements.inventorySkus.textContent = String(summary.skuCount);
+  elements.inventorySkus.textContent = String(products.length);
   elements.inventoryWarehouses.textContent = String(warehouses.length);
   elements.inventoryLow.textContent = String(summary.lowStockCount);
   elements.inventoryStatus.textContent = `${products.length} products · ${movements.length} recent movements`;
@@ -348,7 +347,7 @@ if (!supabaseConfigured) {
   elements.notice.innerHTML = "<strong>Configuration required</strong><span>Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in .env.local, then restart the development server.</span>";
   feedback(elements.authFeedback, "Supabase environment variables are missing.", "error");
 } else {
-  supabase.auth.onAuthStateChange((_event, session) => { void showUser(session?.user ?? null); });
+  supabase.auth.onAuthStateChange((_event, session) => { queueMicrotask(() => { void showUser(session?.user ?? null); }); });
   supabase.auth.getSession().then(({ data, error }) => {
     if (error) feedback(elements.authFeedback, error.message, "error");
     void showUser(data?.session?.user ?? null);
