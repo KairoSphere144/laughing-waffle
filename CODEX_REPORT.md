@@ -113,3 +113,11 @@ Verification:
 - The remediation head is `e888f547315b36d1449e233c7225d120fc6fa269`; a fresh CI run has not yet been returned at the time of this report.
 - The Supabase migration remains unapplied. Authenticated CRUD and two-user RLS isolation remain unverified against the live project.
 - PR #9 remains a draft and has not been merged or deployed.
+
+
+### CI correction — 2026-11-05
+
+- First remediation CI run #68 exposed one failing assertion: invalid `receivedDate` values were reported as follow-up-date errors because the calendar-date validation branch still used a hard-coded message.
+- Corrected the validator to use the supplied field label for both format and calendar validity errors.
+- Corrected the edit-dialog text color to use the palette's defined foreground color.
+- A fresh CI run is required for the corrected head; no passing result is claimed yet.
