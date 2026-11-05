@@ -35,6 +35,10 @@ The Pages workflow builds and tests the Vite app on pushes to `main`. Add the fo
 
 Set the Supabase Auth redirect allowlist to include `https://kairosphere144.github.io/laughing-waffle/` and the local Vite URL (`http://localhost:5173/`).
 
+## Personal digital agent
+
+The proposed personal digital agent architecture is documented in [docs/PERSONAL_DIGITAL_AGENT_ARCHITECTURE.md](docs/PERSONAL_DIGITAL_AGENT_ARCHITECTURE.md). This is a design proposal; no persistent agent runtime or 24/7 worker is currently deployed. The design prioritizes read-only, owner-scoped tools, durable jobs, traceability and action-specific human approval.
+
 ## Structure
 
 ```text
