@@ -240,7 +240,11 @@ group by
   sm.product_id, p.sku, p.name, p.unit, p.reorder_point,
   p.unit_cost, p.cost_currency;
 
--- Public-schema tables are not automatically exposed to the Data API on new projects.
+-- Explicit least-privilege grants: public-schema tables are not automatically exposed
+-- to the Data API on new projects. No anonymous access and no ledger mutation/deletion.
+revoke all on public.organizations, public.organization_members, public.warehouses,
+  public.products, public.stock_movements from anon, authenticated;
+revoke all on public.inventory_balances from anon, authenticated;
 grant select, insert, update on public.organizations to authenticated;
 grant select, insert on public.organization_members to authenticated;
 grant select, insert, update on public.warehouses to authenticated;
