@@ -1,10 +1,12 @@
 import { createOpportunity, formatMoney, summarizePipeline } from "./domain.js";
+import { createSessionRequestGuard } from "./session-guard.js";
 import { supabase, supabaseConfigured } from "./supabase.js";
 import { createUserOpportunity, deleteUserOpportunity, listOpportunities, updateUserOpportunity } from "./opportunities.js";
 
 let opportunities = [];
 let currentUser = null;
 let authMode = "signin";
+const sessionRequestGuard = createSessionRequestGuard();
 const elements = {
   count: document.querySelector("#metric-count"), value: document.querySelector("#metric-value"), next: document.querySelector("#metric-next"),
   table: document.querySelector("#opportunity-rows"), recordCount: document.querySelector("#opportunity-count"), form: document.querySelector("#opportunity-form"),
@@ -22,26 +24,33 @@ function feedback(element, message, kind = "") {
 }
 
 function showUser(user) {
-  currentUser = user;
   const signedIn = Boolean(user);
+  const { changed, ticket } = sessionRequestGuard.activate(user?.id ?? null);
+  currentUser = user;
   elements.authPanel.hidden = signedIn || !supabaseConfigured;
   authenticatedContent.forEach(section => { section.hidden = !signedIn; });
   elements.signOut.hidden = !signedIn;
   elements.authUser.textContent = user?.email ?? "";
+
   if (!signedIn) {
     opportunities = [];
     render();
     return;
   }
-  void refreshOpportunities();
+
+  if (changed) void refreshOpportunities(ticket);
 }
 
-async function refreshOpportunities() {
+async function refreshOpportunities(ticket) {
   try {
-    opportunities = await listOpportunities(supabase);
+    const records = await listOpportunities(supabase);
+    if (!sessionRequestGuard.isCurrent(ticket)) return;
+    opportunities = records;
     render();
   } catch (error) {
-    feedback(elements.feedback, `Could not load opportunities: ${error.message}`, "error");
+    if (sessionRequestGuard.isCurrent(ticket)) {
+      feedback(elements.feedback, `Could not load opportunities: ${error.message}`, "error");
+    }
   }
 }
 
@@ -169,10 +178,10 @@ if (!supabaseConfigured) {
   elements.notice.innerHTML = "<strong>Configuration required</strong><span>Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in .env.local, then restart the development server.</span>";
   feedback(elements.authFeedback, "Supabase environment variables are missing.", "error");
 } else {
-  supabase.auth.onAuthStateChange((_event, session) => showUser(session?.user ?? null));
-  supabase.auth.getSession().then(({ data, error }) => {
-    if (error) feedback(elements.authFeedback, error.message, "error");
-    showUser(data?.session?.user ?? null);
+  // Supabase emits INITIAL_SESSION after restoring persisted authentication.
+  // Defer data access until this synchronous auth callback has returned.
+  supabase.auth.onAuthStateChange((_event, session) => {
+    setTimeout(() => showUser(session?.user ?? null), 0);
   });
 }
 render();
