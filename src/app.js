@@ -121,10 +121,16 @@ function getEditDialog() {
   heading.innerHTML = '<div><p class="eyebrow">UPDATE RECORD</p><h2 id="edit-dialog-title">Edit opportunity</h2></div>';
   const form = elements.form.cloneNode(true);
   form.removeAttribute("id");
+  const idMap = new Map();
   form.querySelectorAll("[id]").forEach((element, index) => {
-    const newId = `edit-${index}-${element.id}`;
+    const oldId = element.id;
+    const newId = `edit-${index}-${oldId}`;
+    idMap.set(oldId, newId);
     element.id = newId;
-    if (element.tagName === "LABEL") element.htmlFor = newId;
+  });
+  form.querySelectorAll("label[for]").forEach(label => {
+    const originalTarget = label.htmlFor.replace(/^edit-\\d+-/, "");
+    label.htmlFor = idMap.get(originalTarget) ?? label.htmlFor;
   });
   form.querySelector('button[type="submit"]').textContent = "Save changes";
   const cancel = document.createElement("button");
