@@ -15,6 +15,7 @@ alter table public.opportunities
   add column if not exists problem_duration text not null default 'unknown'
     check (problem_duration in ('unknown', 'one_off', 'recurring')),
   add column if not exists desired_outcome text,
+  add column if not exists received_date date,
   add column if not exists next_follow_up date;
 
 create index if not exists opportunities_user_follow_up_idx
