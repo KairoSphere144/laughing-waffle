@@ -5,6 +5,8 @@ import { createUserOpportunity, deleteUserOpportunity, listOpportunities, update
 let opportunities = [];
 let currentUser = null;
 let authMode = "signin";
+let editingOpportunity = null;
+let editDialog = null;
 const elements = {
   count: document.querySelector("#metric-count"), value: document.querySelector("#metric-value"), next: document.querySelector("#metric-next"),
   table: document.querySelector("#opportunity-rows"), recordCount: document.querySelector("#opportunity-count"), form: document.querySelector("#opportunity-form"),
@@ -82,7 +84,8 @@ function render() {
     if (item.problemStatement) {
       const problem = document.createElement("small");
       problem.className = "row-subtext";
-      problem.textContent = item.problemStatement;
+      problem.textContent = item.problemStatement.length > 120 ? `${item.problemStatement.slice(0, 117)}…` : item.problemStatement;
+      problem.title = item.problemStatement;
       name.append(problem);
     }
     const stageBadge = document.createElement("span");
@@ -106,40 +109,76 @@ function render() {
   }
 }
 
-function askValue(label, currentValue) {
-  return prompt(label, currentValue ?? "");
+function getEditDialog() {
+  if (editDialog) return editDialog;
+  editDialog = document.createElement("dialog");
+  editDialog.className = "edit-dialog";
+  editDialog.setAttribute("aria-labelledby", "edit-dialog-title");
+  const panel = document.createElement("section");
+  panel.className = "panel edit-dialog-panel";
+  const heading = document.createElement("div");
+  heading.className = "panel-heading";
+  heading.innerHTML = '<div><p class="eyebrow">UPDATE RECORD</p><h2 id="edit-dialog-title">Edit opportunity</h2></div>';
+  const form = elements.form.cloneNode(true);
+  form.removeAttribute("id");
+  form.querySelectorAll("[id]").forEach((element, index) => {
+    const newId = `edit-${index}-${element.id}`;
+    element.id = newId;
+    if (element.tagName === "LABEL") element.htmlFor = newId;
+  });
+  form.querySelector('button[type="submit"]').textContent = "Save changes";
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "secondary-button";
+  cancel.textContent = "Cancel";
+  cancel.addEventListener("click", () => editDialog.close());
+  form.append(cancel);
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!editingOpportunity) return;
+    const data = new FormData(form);
+    const changes = Object.fromEntries(data.entries());
+    try {
+      const valid = createOpportunity({ ...editingOpportunity, ...changes });
+      const saved = await updateUserOpportunity(supabase, editingOpportunity.id, valid);
+      opportunities = opportunities.map(record => record.id === editingOpportunity.id ? saved : record);
+      editDialog.close();
+      editingOpportunity = null;
+      render();
+      feedback(elements.feedback, "Opportunity intake updated.", "success");
+    } catch (error) {
+      feedback(form.querySelector(".form-feedback"), error.message, "error");
+    }
+  });
+  panel.append(heading, form);
+  editDialog.append(panel);
+  editDialog.addEventListener("click", event => {
+    if (event.target === editDialog) editDialog.close();
+  });
+  editDialog.addEventListener("close", () => { editingOpportunity = null; });
+  document.body.append(editDialog);
+  return editDialog;
 }
 
-async function editOpportunity(item) {
-  const fields = [
-    ["name", "Opportunity name", item.name],
-    ["stage", "Stage (lead, qualified, proposal, negotiation)", item.stage],
-    ["organization", "Organization", item.organization],
-    ["contactName", "Contact name", item.contactName],
-    ["leadSource", "Lead source", item.leadSource],
-    ["problemStatement", "Client-stated problem", item.problemStatement],
-    ["currentProcess", "Current process", item.currentProcess],
-    ["businessImpact", "Business impact", item.businessImpact],
-    ["urgency", "Urgency (unknown, low, normal, high, critical)", item.urgency],
-    ["problemDuration", "Problem duration (unknown, one_off, recurring)", item.problemDuration],
-    ["desiredOutcome", "Desired outcome", item.desiredOutcome],
-    ["nextFollowUp", "Next follow-up date (YYYY-MM-DD)", item.nextFollowUp],
-    ["amount", "Estimated value (leave blank if unknown)", item.amount],
-    ["currency", "Currency (USD or SRD)", item.currency]
-  ];
-  const changes = {};
-  for (const [key, label, value] of fields) {
-    const answer = askValue(label, value);
-    if (answer === null) return;
-    changes[key] = answer;
+function editOpportunity(item) {
+  editingOpportunity = item;
+  const dialog = getEditDialog();
+  const form = dialog.querySelector("form");
+  const values = {
+    name: item.name, stage: item.stage, amount: item.amount ?? "", currency: item.currency,
+    organization: item.organization ?? "", contactName: item.contactName ?? "",
+    leadSource: item.leadSource ?? "", problemStatement: item.problemStatement ?? "",
+    currentProcess: item.currentProcess ?? "", businessImpact: item.businessImpact ?? "",
+    urgency: item.urgency, problemDuration: item.problemDuration,
+    desiredOutcome: item.desiredOutcome ?? "", receivedDate: item.receivedDate ?? "",
+    nextFollowUp: item.nextFollowUp ?? ""
+  };
+  for (const [name, value] of Object.entries(values)) {
+    const control = form.elements.namedItem(name);
+    if (control) control.value = value;
   }
-  try {
-    const valid = createOpportunity({ ...item, ...changes });
-    const saved = await updateUserOpportunity(supabase, item.id, valid);
-    opportunities = opportunities.map(record => record.id === item.id ? saved : record);
-    render();
-    feedback(elements.feedback, "Opportunity intake updated.", "success");
-  } catch (error) { feedback(elements.feedback, error.message, "error"); }
+  feedback(form.querySelector(".form-feedback"), "");
+  dialog.showModal();
 }
 
 async function removeOpportunity(item) {
@@ -162,7 +201,7 @@ elements.form.addEventListener("submit", async event => {
       problemStatement: formData.get("problemStatement"), currentProcess: formData.get("currentProcess"),
       businessImpact: formData.get("businessImpact"), urgency: formData.get("urgency"),
       problemDuration: formData.get("problemDuration"), desiredOutcome: formData.get("desiredOutcome"),
-      nextFollowUp: formData.get("nextFollowUp")
+      receivedDate: formData.get("receivedDate"), nextFollowUp: formData.get("nextFollowUp")
     });
     opportunities = [opportunity, ...opportunities];
     render(); elements.form.reset();
