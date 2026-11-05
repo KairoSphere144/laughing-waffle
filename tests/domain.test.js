@@ -6,7 +6,7 @@ test("creates a normalized opportunity with optional problem-intake fields", () 
   const result = createOpportunity({
     name: "  Pump supply  ", stage: "qualified", amount: "125.456", currency: "usd",
     organization: "  Acme  ", problemStatement: "  Missing product identifiers  ",
-    urgency: "high", problemDuration: "recurring", id: "test-1"
+    urgency: "high", problemDuration: "recurring", receivedDate: "2026-11-03", id: "test-1"
   });
   assert.equal(result.id, "test-1");
   assert.equal(result.name, "Pump supply");
@@ -16,6 +16,7 @@ test("creates a normalized opportunity with optional problem-intake fields", () 
   assert.equal(result.problemStatement, "Missing product identifiers");
   assert.equal(result.urgency, "high");
   assert.equal(result.problemDuration, "recurring");
+  assert.equal(result.receivedDate, "2026-11-03");
   assert.equal(result.dataStatus, "user-entered");
 });
 
@@ -39,6 +40,7 @@ test("rejects invalid stages, non-positive values, unsupported currencies and in
   assert.throws(() => createOpportunity({ name: "Valid", amount: "", problemDuration: "forever" }), /duration/i);
   assert.throws(() => createOpportunity({ name: "Valid", amount: "", nextFollowUp: "tomorrow" }), /follow-up date/i);
   assert.throws(() => createOpportunity({ name: "Valid", amount: "", nextFollowUp: "2026-02-30" }), /follow-up date/i);
+  assert.throws(() => createOpportunity({ name: "Valid", amount: "", receivedDate: "2026-02-30" }), /received date/i);
 });
 
 test("summarizes USD and SRD independently without mixing currencies or counting unknown values", () => {
