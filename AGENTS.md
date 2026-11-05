@@ -176,6 +176,12 @@ At the end of each completed milestone:
 
 If client outreach reveals a new requirement, record the requirement as a candidate and its source/date, but do not silently displace the current priority. The project architect / human operator sets priority.
 
+## 8A. Workforce expansion candidate
+
+A planned expansion is Participant & Workforce Management, documented in `docs/PARTICIPANT_WORKFORCE_MANAGEMENT.md`. It must not displace the current opportunity-to-delivery milestone until that milestone's acceptance criteria are met.
+
+When prioritized, implement the smallest safe increment: approved work packages and budgets, participant/candidate records, engagement approval, assignments, deliverable acceptance, compensation obligations, and payment evidence. Do not implement payment execution in the initial scope. Require jurisdiction review, strict access controls, separate approval of commitments and payments, and explicit human approval for any actual payout.
+
 ## 9. Milestone history
 
 - 2026-11-03 — Established this repository-level agent brief. Next engineering priority: inspect the authenticated foundation and implement the client problem-to-solution operating workflow in small, tested increments. No implementation milestone is claimed complete by this instruction-file change.
