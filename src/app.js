@@ -2,7 +2,7 @@ import { createOpportunity, formatMoney, summarizePipeline } from "./domain.js";
 import { supabase, supabaseConfigured } from "./supabase.js";
 import { createUserOpportunity, deleteUserOpportunity, listOpportunities, updateUserOpportunity } from "./opportunities.js";
 import {
-  createOrganization, createProduct, createWarehouse, listInventoryBalances, listOpportunities as unused,
+  createOrganization, createProduct, createWarehouse, listInventoryBalances,
   listOrganizations, listProducts, listStockMovements, listWarehouses, recordStockMovement
 } from "./inventory.js";
 import { summarizeInventory } from "./inventory-domain.js";
@@ -341,7 +341,6 @@ elements.signOut.addEventListener("click", async () => {
   if (error) feedback(elements.authFeedback, error.message, "error");
 });
 
-document.querySelectorAll(".view-tab").forEach(button => button.addEventListener("click", () => setView(button.dataset.view)));
 elements.today.textContent = new Intl.DateTimeFormat("en", { weekday: "short", day: "numeric", month: "short", year: "numeric" }).format(new Date());
 
 if (!supabaseConfigured) {
