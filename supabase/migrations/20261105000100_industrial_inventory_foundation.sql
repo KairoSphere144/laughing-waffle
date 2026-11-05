@@ -218,26 +218,30 @@ create or replace view public.inventory_balances
 with (security_invoker = true)
 as
 select
-  sm.organization_id,
-  sm.warehouse_id,
+  p.organization_id,
+  w.id as warehouse_id,
   w.code as warehouse_code,
   w.name as warehouse_name,
-  sm.product_id,
+  p.id as product_id,
   p.sku,
   p.name as product_name,
   p.unit,
   p.reorder_point,
   p.unit_cost,
   p.cost_currency,
-  sum(sm.quantity_delta)::numeric(14,3) as quantity_on_hand
-from public.stock_movements sm
-join public.warehouses w
-  on w.id = sm.warehouse_id and w.organization_id = sm.organization_id
-join public.products p
-  on p.id = sm.product_id and p.organization_id = sm.organization_id
+  coalesce(sum(sm.quantity_delta), 0)::numeric(14,3) as quantity_on_hand
+from public.products p
+cross join public.warehouses w
+left join public.stock_movements sm
+  on sm.product_id = p.id
+  and sm.warehouse_id = w.id
+  and sm.organization_id = p.organization_id
+where p.organization_id = w.organization_id
+  and p.is_active
+  and w.is_active
 group by
-  sm.organization_id, sm.warehouse_id, w.code, w.name,
-  sm.product_id, p.sku, p.name, p.unit, p.reorder_point,
+  p.organization_id, w.id, w.code, w.name,
+  p.id, p.sku, p.name, p.unit, p.reorder_point,
   p.unit_cost, p.cost_currency;
 
 -- Explicit least-privilege grants: public-schema tables are not automatically exposed
