@@ -1,10 +1,12 @@
 import { createOpportunity, formatMoney, summarizePipeline } from "./domain.js";
+import { createSessionEpoch } from "./session-epoch.js";
 import { supabase, supabaseConfigured } from "./supabase.js";
 import { createUserOpportunity, deleteUserOpportunity, listOpportunities, updateUserOpportunity } from "./opportunities.js";
 
 let opportunities = [];
 let currentUser = null;
 let authMode = "signin";
+const sessionEpoch = createSessionEpoch();
 const elements = {
   count: document.querySelector("#metric-count"), value: document.querySelector("#metric-value"), next: document.querySelector("#metric-next"),
   table: document.querySelector("#opportunity-rows"), recordCount: document.querySelector("#opportunity-count"), form: document.querySelector("#opportunity-form"),
@@ -22,25 +24,33 @@ function feedback(element, message, kind = "") {
 }
 
 function showUser(user) {
+  const previousUserId = currentUser?.id ?? null;
   currentUser = user;
+  const requestToken = sessionEpoch.advance();
   const signedIn = Boolean(user);
   elements.authPanel.hidden = signedIn || !supabaseConfigured;
   authenticatedContent.forEach(section => { section.hidden = !signedIn; });
   elements.signOut.hidden = !signedIn;
   elements.authUser.textContent = user?.email ?? "";
-  if (!signedIn) {
+
+  // Clear the previous account's records immediately on sign-out or account switch.
+  if (!signedIn || (previousUserId && previousUserId !== user.id)) {
     opportunities = [];
     render();
-    return;
   }
-  void refreshOpportunities();
+  if (!signedIn) return;
+  void refreshOpportunities(user.id, requestToken);
 }
 
-async function refreshOpportunities() {
+async function refreshOpportunities(userId, requestToken) {
   try {
-    opportunities = await listOpportunities(supabase);
+    const records = await listOpportunities(supabase);
+    // An older request must never overwrite the active account's workspace.
+    if (!sessionEpoch.isCurrent(requestToken) || currentUser?.id !== userId) return;
+    opportunities = records;
     render();
   } catch (error) {
+    if (!sessionEpoch.isCurrent(requestToken) || currentUser?.id !== userId) return;
     feedback(elements.feedback, `Could not load opportunities: ${error.message}`, "error");
   }
 }
