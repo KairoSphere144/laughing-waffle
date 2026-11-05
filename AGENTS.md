@@ -97,54 +97,40 @@ Respect the existing architecture. Inspect the actual source, migrations, tests,
 
 Financial functionality is recordkeeping and analysis only unless a separately approved scope explicitly changes that. Do not implement payment execution, trading, custody, or money movement as an assumed feature.
 
-## 6. Current milestone — client problem-to-solution operating foundation
+## 6. Current milestone — warehouse and inventory operations foundation
 
-**Priority:** Build a reliable workflow that turns a real prospect conversation into a qualified opportunity, a scoped solution, a delivery plan, and a verifiable outcome.
+**Priority:** Deliver the first genuinely useful industrial workflow: an organization can register warehouses and products, record stock receipts/issues/adjustments, and see stock-on-hand derived from an immutable movement ledger.
 
-### Required next increments
+### Implemented in the current feature branch
 
-1. **Inspect current implementation**
-   - Map the current dashboard, opportunity data model, Supabase schema/RLS, validation, tests, and navigation.
-   - Identify what already exists; do not duplicate functioning features.
-   - Report gaps before proposing broad refactors.
+- Organization and owner-membership foundation.
+- Organization-scoped warehouse and product masters.
+- Stock movement ledger with receipt, issue and adjustment types.
+- Inventory balances derived from movements, including zero-stock combinations.
+- RLS policies and explicit Data API grants.
+- Responsive inventory workspace and existing commercial pipeline retained separately.
+- Domain validation tests for SKU, warehouse, quantity precision, movement direction and reorder thresholds.
 
-2. **Opportunity intake**
-   - Capture organization/contact reference, source of lead, date received, problem statement, current process, impact, urgency, desired outcome, and next follow-up.
-   - Record only information actually supplied; unknown values remain unknown.
-   - Support a clear status lifecycle such as: New → Contacted → Qualified → Proposed → Accepted / Declined → In Delivery → Completed → Follow-up.
-   - Allow a prospect to have multiple distinct problems/opportunities without conflating them.
+### Required verification before merge
 
-3. **Problem and solution definition**
-   - For each opportunity, record temporary vs recurring/long-term need, root problem, proposed intervention, expected deliverables, exclusions, dependencies, risks, estimated effort, acceptance criteria, and evidence required to verify completion.
-   - Separate client-stated facts from internal analysis and proposed assumptions.
+1. Run `npm ci`, `npm test`, and `npm run build` in CI.
+2. Apply the additive migration to the intended Supabase project only after reviewing the SQL.
+3. Verify RLS and Data API grants for every new table and view.
+4. Test two separate user accounts and confirm cross-organization reads/writes are denied.
+5. Test opening receipt, stock issue, adjustment, zero-stock display and low-stock alerts.
+6. Verify mobile layout and error/loading/empty states.
+7. Review the branch diff against current `main`; do not merge or deploy without human approval.
 
-4. **Milestone and task tracking**
-   - Link tasks and milestones to an opportunity.
-   - Track owner, status, due date, dependencies, and completion evidence.
-   - Make the next action obvious; avoid dashboards that show activity without a clear action.
+### Next milestones
 
-5. **Client follow-up and delivery record**
-   - Track last contact, next follow-up date, communication summary, decisions, and open questions.
-   - Do not automatically send external messages. Prepare drafts or reminders only unless the operator explicitly authorizes sending.
-   - Preserve a delivery and handover record for completed work.
+- Employee invitations and permission administration.
+- Purchase requests, suppliers, purchase orders and receiving.
+- Inter-warehouse transfers and barcode/QR workflows.
+- Equipment register and preventive maintenance.
+- Workforce tasks, operational handover and notifications.
+- Finance records, reconciliations and reporting; keep accounting evidence and currencies explicit.
 
-6. **Operational dashboard**
-   - Show actionable pipeline stages, overdue follow-ups, upcoming tasks, active delivery, and completed outcomes.
-   - Keep SRD and USD amounts separate. Never silently combine currencies.
-   - Clearly label estimates, confirmed values, and missing information.
-   - Optimize the main workflows for mobile.
-
-### Acceptance criteria for this milestone
-
-- A user can create and update an opportunity with validated fields.
-- A problem can be classified as temporary or recurring without forcing an unsupported assumption.
-- A solution can be scoped with deliverables and acceptance criteria.
-- Tasks/follow-ups can be linked to the opportunity and surfaced on the dashboard.
-- Data remains isolated to the authenticated owner under RLS.
-- Tests cover validation, lifecycle transitions, and persistence behavior.
-- The frontend handles loading, empty, success, and error states.
-- `npm test` and `npm run build` pass, or any failure is reported with reproducible detail.
-- No secrets, client data, or unapproved external commitments are introduced.
+Do not use Jetzza International operational or personal data without the employer's explicit authorization. Employment provides first-hand process insight, not permission to access internal systems or copy records.
 
 ## 7. Engineering workflow
 
