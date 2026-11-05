@@ -2,6 +2,10 @@
 
 Industrial intelligence and trade operations workspace. The initial operating market is Suriname, with an architecture intended to support international trade workflows over time.
 
+## Operating architecture
+
+The target 24/7 operating model, integration boundaries, security controls, phased implementation gates and Digital Explorer infrastructure policy are documented in [docs/OPERATING_ARCHITECTURE.md](docs/OPERATING_ARCHITECTURE.md). The planned participant hiring, engagement, work assignment, compensation approval and payment-record controls are specified in [docs/PARTICIPANT_WORKFORCE_MANAGEMENT.md](docs/PARTICIPANT_WORKFORCE_MANAGEMENT.md). These are architecture and product foundations, not claims that persistent workers, hiring or payouts are already deployed.
+
 ## Current build: authenticated foundation
 
 - Responsive operations dashboard with USD and SRD totals kept separate.
