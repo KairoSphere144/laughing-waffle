@@ -8,10 +8,10 @@ function optionalText(value, field, maxLength = 2000) {
   return text || null;
 }
 
-function optionalDate(value) {
+function optionalDate(value, field = "date") {
   const date = String(value ?? "").trim();
   if (!date) return null;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("Enter a valid follow-up date.");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error(`Enter a valid ${field}.`);
   const [year, month, day] = date.split("-").map(Number);
   const parsed = new Date(Date.UTC(year, month - 1, day));
   if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) {
@@ -51,7 +51,8 @@ export function createOpportunity(input) {
     urgency,
     problemDuration,
     desiredOutcome: optionalText(input?.desiredOutcome, "Desired outcome"),
-    nextFollowUp: optionalDate(input?.nextFollowUp),
+    receivedDate: optionalDate(input?.receivedDate, "received date"),
+    nextFollowUp: optionalDate(input?.nextFollowUp, "follow-up date"),
     dataStatus: "user-entered"
   };
 }
