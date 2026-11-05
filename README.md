@@ -4,7 +4,7 @@ Industrial intelligence and trade operations workspace. The initial operating ma
 
 ## Operating architecture
 
-The target 24/7 operating model, integration boundaries, security controls, phased implementation gates and Digital Explorer infrastructure policy are documented in [docs/OPERATING_ARCHITECTURE.md](docs/OPERATING_ARCHITECTURE.md). This is an architecture baseline, not a claim that persistent workers or continuous uptime are already deployed.
+The target 24/7 operating model, integration boundaries, security controls, phased implementation gates and Digital Explorer infrastructure policy are documented in [docs/OPERATING_ARCHITECTURE.md](docs/OPERATING_ARCHITECTURE.md). The planned participant hiring, engagement, work assignment, compensation approval and payment-record controls are specified in [docs/PARTICIPANT_WORKFORCE_MANAGEMENT.md](docs/PARTICIPANT_WORKFORCE_MANAGEMENT.md). These are architecture and product foundations, not claims that persistent workers, hiring or payouts are already deployed.
 
 ## Current build: authenticated foundation
 
