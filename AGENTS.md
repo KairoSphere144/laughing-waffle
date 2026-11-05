@@ -146,6 +146,84 @@ Financial functionality is recordkeeping and analysis only unless a separately a
 - `npm test` and `npm run build` pass, or any failure is reported with reproducible detail.
 - No secrets, client data, or unapproved external commitments are introduced.
 
+## 6A. Extended product build route — operational core to industrial platform
+
+This roadmap extends the current problem-to-solution milestone. It does not authorize skipping the current acceptance criteria or building every subsystem at once. Work in the sequence below, using the smallest independently testable increment.
+
+### Gate 0 — reconcile existing pull requests and deployment foundation
+
+Before adding new schema or features:
+- Inspect the exact current heads, base commits, complete diffs, review comments, and CI results for PR #9 (opportunity intake), PR #10 (continuous operating architecture), and PR #11 (participant/workforce foundation).
+- Reconcile overlapping architecture documents between PR #10 and PR #11. Keep one canonical operating architecture and link to it; do not maintain competing copies.
+- PR #9's intake migration must be reviewed against the live schema and RLS before it is applied. Verify the exact current PR head with `npm ci`, `npm test`, and `npm run build`; do not rely on an earlier commit's green check.
+- Preserve the existing GitHub Pages deployment workflow. Inspect PR #7/#8 or any workflow replacement for its actual effect before accepting changes; never remove the only working production deployment path without a verified replacement.
+- Confirm the target Supabase project/environment before any migration. Browser code may contain only the publishable key; never request, expose, or commit service-role secrets.
+- Report a concise readiness matrix and identify the single smallest unblocked task before proceeding.
+
+### Gate 1 — complete the opportunity-to-delivery operating core
+
+After the opportunity-intake foundation is safely integrated:
+1. Define solution scope linked to an opportunity: client-stated facts, internal analysis, proposed intervention, deliverables, exclusions, dependencies, risks, estimated effort, acceptance criteria, and verification evidence.
+2. Add opportunity-linked tasks and milestones with owner, status, due date, dependencies, and completion evidence.
+3. Add contact/follow-up history and delivery/handover records. External messages remain drafts unless explicitly approved.
+4. Surface overdue follow-ups, upcoming work, active delivery, and verified outcomes in the dashboard.
+5. Keep estimated and confirmed values distinct; keep SRD and USD separate.
+6. Add lifecycle, validation, persistence, and authorization tests. Keep the UI responsive and avoid unrelated rewrites.
+
+### Gate 2 — settle ownership and authorization before workforce schema
+
+Do not create workforce tables until the product explicitly chooses whether the MVP is single-operator-owned or supports organizations/tenants and membership. A row's `user_id` is not, by itself, a tenant model.
+
+Design and document:
+- Organization/tenant membership and role assignment, if multi-tenant operation is required.
+- Separate access for operator/recruiter, participant, work-package budget approver, deliverable reviewer, compensation reviewer, and payment approver.
+- Participant self-access to only their permitted profile, engagement, assignment, and deliverable information.
+- Separation of duties: participants must not approve their own deliverables or compensation/payment records.
+- More restrictive authorization for personal, compensation, and payment data than ordinary opportunity records.
+- Minimal personal-data collection, retention, audit history, and client/tenant isolation.
+
+Design migrations and RLS policies together. Add positive and negative tests for cross-user, cross-tenant, participant self-access, role boundaries, and compensation/payment visibility. Do not treat a clean security-advisor report as a substitute for these tests.
+
+### Gate 3 — implement workforce MVP in controlled increments
+
+Only after Gates 0–2 pass, implement in this order:
+1. Approved work packages with scope, required skills, dates, and explicit budget ceilings.
+2. Minimal candidate/participant records and controlled participant access.
+3. Engagement terms and agreement status, with no unsupported employment/contractor classification.
+4. Assignments, milestones, attendance or work evidence only where required, and deliverable acceptance.
+5. Compensation obligations, kept separate from actual payment/settlement records.
+6. Manual settlement evidence and reconciliation; never mark an obligation paid without independent bank/provider evidence.
+7. Management views and audit history with least-privilege access.
+
+No recruitment or engagement should proceed without an approved work package and budget. Scope or budget changes require an explicit amendment. Do not implement payout APIs, custody, payment execution, or money movement as an assumed feature. Obtain qualified Suriname jurisdiction/classification review before activating paid engagements.
+
+### Gate 4 — industrial resource and trade operations
+
+After the operational and workforce foundations are proven, extend the shared model incrementally:
+- Product and parts master data, catalogue quality, supplier references, and purchasing records.
+- Inventory locations, stock movements, reservations, adjustments, and traceable counts.
+- Equipment/assets, maintenance schedules, service history, and availability.
+- Warehouse workflows connecting receiving, put-away, picking, dispatch, and delivery evidence.
+- Operational reporting that distinguishes planned, recorded, verified, and reconciled quantities/values.
+
+Do not introduce stock valuation, accounting, or financial claims without explicit data definitions, currency handling, reconciliation rules, and auditability. Avoid duplicating a dedicated ERP/accounting system where an integration is safer.
+
+### Gate 5 — automation and integration infrastructure
+
+Only when the underlying workflows and authorization are stable:
+- Add event-driven integrations and durable background processing where real workflows require them.
+- Use idempotency, retries, dead-letter/error visibility, audit logs, and human approval for consequential actions.
+- Add scheduled jobs, notifications, and external adapters as independently testable modules.
+- Monitor failures and integration health; do not claim an action completed until the external system confirms it.
+
+Do not add always-on infrastructure, paid services, or unnecessary orchestration merely to create the appearance of autonomy. Prefer the smallest reliable architecture compatible with the workload and budget.
+
+### Codex implementation contract for this roadmap
+
+For every increment: inspect current code and data contracts first; state the narrow plan; use a dedicated branch and reviewable PR; include safe migrations and RLS tests when schema changes; run and report exact test/build commands against the exact head; review the final diff; document environment setup and manual integration steps; and state remaining risks. Do not fabricate passing tests or live integration evidence.
+
+This roadmap does not authorize merging, public deployment, production migration application, permission/security/billing changes, destructive operations, external commitments, or handling secrets. Those remain approval-gated.
+
 ## 7. Engineering workflow
 
 For every task:
