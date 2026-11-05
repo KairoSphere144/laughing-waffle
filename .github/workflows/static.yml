@@ -19,6 +19,12 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+# Supabase publishable configuration is public by design and safe for browser use.
+# Repository variables override these project defaults if configured later.
+env:
+  VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL || 'https://ndmmmxxxlseouxkduedh.supabase.co' }}
+  VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_5XsfkcrVyrpXK95IC6wa1g_EwGBttGl' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -38,16 +44,10 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Verify Supabase public configuration
         run: |
-          test -n "$VITE_SUPABASE_URL" || { echo "::error::Set the VITE_SUPABASE_URL Actions variable."; exit 1; }
-          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY" || { echo "::error::Set the VITE_SUPABASE_PUBLISHABLE_KEY Actions variable."; exit 1; }
-        env:
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          test -n "$VITE_SUPABASE_URL" || { echo "::error::Supabase project URL is missing."; exit 1; }
+          test -n "$VITE_SUPABASE_PUBLISHABLE_KEY" || { echo "::error::Supabase publishable key is missing."; exit 1; }
       - name: Build application
         run: npm run build
-        env:
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
