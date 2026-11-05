@@ -257,3 +257,21 @@ If client outreach reveals a new requirement, record the requirement as a candid
 ## 9. Milestone history
 
 - 2026-11-03 — Established this repository-level agent brief. Next engineering priority: inspect the authenticated foundation and implement the client problem-to-solution operating workflow in small, tested increments. No implementation milestone is claimed complete by this instruction-file change.
+
+
+## 7. Personal digital agent workstream
+
+The long-term direction includes a bounded personal digital operating agent intended to reduce repetitive administrative and research load while preserving human ownership and approval.
+
+Before implementing agent infrastructure:
+- Read `docs/PERSONAL_DIGITAL_AGENT_ARCHITECTURE.md`.
+- Preserve the existing KairoSphere application and Supabase source of truth; do not create a disconnected parallel product.
+- Resolve the current single-user versus multi-organization ownership model before designing shared participant or agent permissions.
+- Start with read-only, owner-scoped tools. Add draft and reversible internal writes only after tests and audit records exist.
+- Never expose privileged keys to browser code or allow retrieved content to override tool policy.
+- Keep email sending, external publication, merges, deployment, financial transactions, hiring, access/security changes and destructive actions behind explicit action-specific approval.
+- Build durable jobs with idempotency, bounded retries, leases, observability, pause controls and failure recovery before claiming 24/7 operation.
+- Keep profile memory, authoritative business records and temporary agent working memory separate.
+- Measure value by verified time saved, reduced missed follow-ups, fewer errors and paid business outcomes—not agent count or message volume.
+
+**Current agent milestone:** architecture and route evaluation only. No agent runtime, worker, memory service, MCP server, n8n instance or agent endpoint has been deployed. The first implementation ticket is a read-only agent control plane after ownership and security boundaries are resolved.
