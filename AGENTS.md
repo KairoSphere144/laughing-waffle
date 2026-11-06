@@ -253,6 +253,20 @@ For every increment: inspect current code and data contracts first; state the na
 
 This roadmap does not authorize merging, public deployment, production migration application, permission/security/billing changes, destructive operations, external commitments, or handling secrets. Those remain approval-gated.
 
+## 6B. Evolution-first architecture and data fitness (mandatory)
+
+Read `docs/architecture/evolution-and-data-fitness.md` before substantial architecture, schema, migration, or data-cleanup work.
+
+The governing rule is: **preserve learning, not obsolete implementation.** Existing architecture, schemas, workflows, and records are provisional. Do not keep them solely for compatibility or because they already exist. Compare them against real requirements and replace them when a cleaner, more correct design is justified.
+
+For every replacement, document the old behavior and failure patterns, define the new contract independently, and classify affected data as retain, transform, quarantine, or retire. Invalid, duplicate, stale, orphaned, unowned, sample, or unverified records must not silently enter production workflows or calculations. Quarantine uncertain data; exclude it from automation and metrics. Retain only records with a defined operational, reference, evidence, or legal purpose and a lifecycle.
+
+Use synthetic fixtures first. Before a data cutover, produce a migration preview with disposition counts and examples, test business invariants and authorization, and prepare rollback/recovery. A backup is for recovery; it is not a mandate to re-import old structures or unusable records. Do not create speculative schema elements without a named workflow, owner, lifecycle, and acceptance test.
+
+Agents should make ordinary reversible code and reviewable-branch design decisions autonomously. Do not let compatibility concerns block a justified replacement. Production cutovers, irreversible deletion, destructive live migrations, access/security changes, public deployment, spending, and external commitments still require explicit approval. Prepare those actions fully rather than using approval gates as a reason to retain obsolete design.
+
+Every substantial implementation report must state what old assumption is retired, what replaces it, data disposition, tests/build evidence, remaining unknowns, and obsolete components ready for removal. Root-cause defects and add regression tests; do not normalize recurring failures into permanent patches.
+
 ## 7. Engineering workflow
 
 For every task:
