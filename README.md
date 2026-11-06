@@ -11,6 +11,10 @@ Industrial intelligence and trade operations workspace. The initial operating ma
 - Row-level security policies constrain records to their owning account.
 - Node.js tests cover domain logic and the Supabase data adapter.
 
+## Engineering doctrine
+
+KairoSphere follows an evolution-first architecture and data-fitness policy: preserve lessons from previous implementations, not obsolete structures or unusable records. See [Evolution and Data Fitness](docs/architecture/evolution-and-data-fitness.md) and the mandatory [agent operating instructions](AGENTS.md).
+
 ## Requirements
 
 - Node.js 20.19 or later.

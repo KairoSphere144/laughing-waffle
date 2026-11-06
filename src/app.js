@@ -7,6 +7,7 @@ let opportunities = [];
 let currentUser = null;
 let authMode = "signin";
 const sessionRequestGuard = createSessionRequestGuard();
+let activeSessionTicket = sessionRequestGuard.activate(null).ticket;
 const elements = {
   count: document.querySelector("#metric-count"), value: document.querySelector("#metric-value"), next: document.querySelector("#metric-next"),
   table: document.querySelector("#opportunity-rows"), recordCount: document.querySelector("#opportunity-count"), form: document.querySelector("#opportunity-form"),
@@ -18,6 +19,10 @@ const elements = {
 const authenticatedContent = [...document.querySelectorAll(".authenticated-content")];
 const stageLabels = { lead: "Lead", qualified: "Qualified", proposal: "Proposal", negotiation: "Negotiation" };
 
+function sessionIsCurrent(userId, ticket = activeSessionTicket) {
+  return currentUser?.id === userId && sessionRequestGuard.isCurrent(ticket);
+}
+
 function feedback(element, message, kind = "") {
   element.textContent = message;
   element.className = `form-feedback ${kind}`.trim();
@@ -27,6 +32,7 @@ function showUser(user) {
   const signedIn = Boolean(user);
   const { changed, ticket } = sessionRequestGuard.activate(user?.id ?? null);
   currentUser = user;
+  activeSessionTicket = ticket;
   elements.authPanel.hidden = signedIn || !supabaseConfigured;
   authenticatedContent.forEach(section => { section.hidden = !signedIn; });
   elements.signOut.hidden = !signedIn;
@@ -98,6 +104,9 @@ function render() {
 }
 
 async function editOpportunity(item) {
+  const userId = currentUser?.id;
+  const ticket = activeSessionTicket;
+  if (!userId) return;
   const name = prompt("Opportunity name", item.name);
   if (name === null) return;
   const stage = prompt("Stage (lead, qualified, proposal, negotiation)", item.stage);
@@ -109,32 +118,46 @@ async function editOpportunity(item) {
   try {
     const valid = createOpportunity({ ...item, name, stage, amount, currency });
     const saved = await updateUserOpportunity(supabase, item.id, valid);
+    if (!sessionIsCurrent(userId, ticket)) return;
     opportunities = opportunities.map(record => record.id === item.id ? saved : record);
     render();
-  } catch (error) { feedback(elements.feedback, error.message, "error"); }
+  } catch (error) {
+    if (sessionIsCurrent(userId, ticket)) feedback(elements.feedback, error.message, "error");
+  }
 }
 
 async function removeOpportunity(item) {
+  const userId = currentUser?.id;
+  const ticket = activeSessionTicket;
+  if (!userId) return;
   if (!confirm(`Delete “${item.name}”?`)) return;
   try {
     await deleteUserOpportunity(supabase, item.id);
+    if (!sessionIsCurrent(userId, ticket)) return;
     opportunities = opportunities.filter(record => record.id !== item.id);
     render();
-  } catch (error) { feedback(elements.feedback, error.message, "error"); }
+  } catch (error) {
+    if (sessionIsCurrent(userId, ticket)) feedback(elements.feedback, error.message, "error");
+  }
 }
 
 elements.form.addEventListener("submit", async event => {
   event.preventDefault();
-  if (!currentUser) return;
+  const userId = currentUser?.id;
+  const ticket = activeSessionTicket;
+  if (!userId) return;
   const formData = new FormData(elements.form);
   try {
-    const opportunity = await createUserOpportunity(supabase, currentUser.id, {
+    const opportunity = await createUserOpportunity(supabase, userId, {
       name: formData.get("name"), stage: formData.get("stage"), amount: formData.get("amount"), currency: formData.get("currency")
     });
+    if (!sessionIsCurrent(userId, ticket)) return;
     opportunities = [opportunity, ...opportunities];
     render(); elements.form.reset();
     feedback(elements.feedback, "Opportunity saved to your account.", "success");
-  } catch (error) { feedback(elements.feedback, error.message, "error"); }
+  } catch (error) {
+    if (sessionIsCurrent(userId, ticket)) feedback(elements.feedback, error.message, "error");
+  }
 });
 
 elements.authMode.addEventListener("click", () => {
