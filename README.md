@@ -15,6 +15,10 @@ KairoSphere connects the operational records a business needs to manage resource
 
 Financial functionality is recordkeeping and analysis only. The platform does not execute payments, custody, lending, trading or credit decisions. Any future financial-sector integration must be separately designed, legally reviewed, permissioned and auditable.
 
+## Supplier-to-procurement workflow contract
+
+The end-to-end supplier lifecycle and its integration contract are documented in [`docs/SUPPLIER_TO_PROCUREMENT_WORKFLOW.md`](docs/SUPPLIER_TO_PROCUREMENT_WORKFLOW.md). This is a design and implementation hand-off, not a claim that procurement software is already implemented. The contract reuses the existing organization, product, warehouse, and append-only stock movement foundations; accepted goods receipts must post into the existing stock ledger.
+
 ## Current implementation
 
 - Responsive Vite application.
