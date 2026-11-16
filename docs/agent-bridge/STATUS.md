@@ -2,7 +2,7 @@
 
 **Last reviewed:** 2026-11-16
 **Repository:** `KairoSphere144/laughing-waffle`
-**Bootstrap branch:** `agent/coordination-bridge`
+**Bootstrap branch:** `agent/coordination-bridge` (head `2e27e758b39edcb08f0336b2a3043cf90d69cc9c`)
 **Production branch:** `main`
 
 ## Coordination state
@@ -12,7 +12,7 @@
 - **VERIFIED:** The bootstrap branch was created from `main`.
 - **BLOCKED:** Local Codex worktree is not connected to this ChatGPT session; no local branch, HEAD, dirty state or local build can be inspected here.
 - **BLOCKED:** No event-driven GitHub-to-ChatGPT notification route has been configured. The planned reviewer uses scheduled GitHub polling; it cannot see uncommitted local changes.
-- **VERIFIED:** Open review PR #20 targets `main`; it is not merged. [PR #20](https://github.com/KairoSphere144/laughing-waffle/pull/20).
+- **VERIFIED:** Open review PR #20 targets `main`; it is not merged; GitHub reports it mergeable. [PR #20](https://github.com/KairoSphere144/laughing-waffle/pull/20).
 - **APPROVAL REQUIRED:** Review and merge PR #20, then check out/sync the approved branch in the local Codex worktree before expecting the Start trigger to work there.
 
 ## Current product milestone
