@@ -287,3 +287,14 @@ If client outreach reveals a new requirement, record the requirement as a candid
 
 - 2026-11-03 — Established this repository-level agent brief. Next engineering priority: inspect the authenticated foundation and implement the client problem-to-solution operating workflow in small, tested increments. No implementation milestone is claimed complete by this instruction-file change.
 - 2026-11-05 — Clarified that the Vite + Supabase description is the intended `main` baseline and that agents must inspect the checked-out branch before implementation. Split the problem-to-solution milestone into readiness, intake, solution scope, tasks/milestones, follow-up/delivery, and dashboard stages with separate acceptance criteria. No application feature or deployment is claimed complete by this instruction update.
+
+
+## 10. Codex Start keyword and agent hand-off protocol
+
+When the human operator sends the exact command **Start** (case-insensitive; optionally followed by a task description), treat it as an instruction to begin the current approved milestone. Before acting, read `docs/agent-bridge/START_PROTOCOL.md`, `docs/agent-bridge/BUILD_LOG.md`, and `docs/agent-bridge/STATUS.md`, then inspect the actual checkout, branch, worktree, and current commit. Do not assume this instruction has been merged or checked out merely because it exists on another branch.
+
+Follow the protocol's scope, safety gates, local/cloud reconciliation, and reporting requirements. Implement only the smallest safe next increment that is supported by the current milestone and acceptance criteria. Never bypass human approval gates in this file. Do not make destructive changes, alter permissions/security/billing, expose secrets, apply production migrations, merge, or deploy publicly without explicit approval.
+
+At the end of every Start task, update the build log with a concise dated entry recording: task/trigger, starting branch and commit, chosen actions, why they were selected, files changed, how the resulting system works, exact tests/build commands and outcomes, commit/PR references, blockers, and the next milestone gate. Update STATUS.md to reflect only verified current state. If no code change was safe, record the inspection and reason. Do not fabricate results. Keep the log free of secrets, credentials, personal data, and client-confidential information.
+
+The repository hand-off files coordinate agents but do not dispatch Codex, grant local filesystem access, or create a live connection to ChatGPT. Local changes become visible to cloud reviewers only after they are safely committed and pushed to an authorized remote branch.
