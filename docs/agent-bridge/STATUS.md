@@ -12,7 +12,8 @@
 - **VERIFIED:** The bootstrap branch was created from `main`.
 - **BLOCKED:** Local Codex worktree is not connected to this ChatGPT session; no local branch, HEAD, dirty state or local build can be inspected here.
 - **BLOCKED:** No event-driven GitHub-to-ChatGPT notification route has been configured. The planned reviewer uses scheduled GitHub polling; it cannot see uncommitted local changes.
-- **APPROVAL REQUIRED:** Review and merge the bootstrap PR, then check out/sync the approved branch in the local Codex worktree before expecting the Start trigger to work there.
+- **VERIFIED:** Open review PR #20 targets `main`; it is not merged. [PR #20](https://github.com/KairoSphere144/laughing-waffle/pull/20).
+- **APPROVAL REQUIRED:** Review and merge PR #20, then check out/sync the approved branch in the local Codex worktree before expecting the Start trigger to work there.
 
 ## Current product milestone
 
