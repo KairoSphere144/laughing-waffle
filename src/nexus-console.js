@@ -33,7 +33,7 @@ export function formatHumanOutput(payload) {
     `TIME: ${payload.timestamp || "unspecified"}`,
     `VERIFICATION: ${payload.verification || "Not verified"}`,
     `NEXT: ${payload.result_status === "simulated" ? "Connect an authorized real data source or adapter to obtain live evidence." : "Review the evidence and proceed."}`
-  ].join("\\n");
+  ].join("\n");
   if (payload?.created) return `REGISTERED: ${payload.created.object_id}\nSPACE: ${payload.created.space_id}\nSTATE: ${payload.created.state}\nIDENTITY: ${payload.created.identity_status}\nDESCRIPTION: ${payload.created.description}\nSAVE: ${payload.persistence}`;
   return JSON.stringify(payload, null, 2);
 }
