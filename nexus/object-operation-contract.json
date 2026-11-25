@@ -1,0 +1,66 @@
+{
+  "version": "0.1.0",
+  "system": "Nexus",
+  "object_input": {
+    "accepted": [
+      "manual-description",
+      "identifier",
+      "image",
+      "sensor-data",
+      "measurement",
+      "external-feed"
+    ],
+    "fields": [
+      "object_id",
+      "space_id",
+      "type",
+      "observations",
+      "source",
+      "observed_at",
+      "confidence",
+      "status"
+    ]
+  },
+  "object_states": [
+    "unknown",
+    "identified-unverified",
+    "identified-verified",
+    "active",
+    "idle",
+    "fault",
+    "archived"
+  ],
+  "interaction": {
+    "mode": "conversational-command",
+    "must_confirm_high_impact_actions": true,
+    "physical_actuation_requires_authorized_adapter_and_safety_interlocks": true
+  },
+  "output": {
+    "fields": [
+      "operation_id",
+      "object_id",
+      "result",
+      "result_status",
+      "source",
+      "timestamp",
+      "verification"
+    ],
+    "result_status": [
+      "simulated",
+      "observed",
+      "executed",
+      "failed",
+      "pending"
+    ]
+  },
+  "verification": {
+    "required_to_claim_success": true
+  },
+  "spaces": {
+    "start_index": 1,
+    "capacity_multiplier": 2
+  },
+  "secrets": {
+    "vault_reference_only": true
+  }
+}
