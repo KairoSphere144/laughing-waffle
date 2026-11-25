@@ -91,3 +91,11 @@ footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 2
 .row-action { font-size: .8rem; margin-right: .35rem; }
 .row-action.danger { color: #ffaaa4; }
 button:disabled { opacity: .65; cursor: wait; }
+
+/* Nexus object console */
+.nexus-console { margin-top: 1.5rem; }
+.nexus-console form { margin: 1rem 0; }
+.nexus-console textarea { width: 100%; min-height: 105px; padding: 12px; border-radius: 8px; border: 1px solid #30445a; color: #edf3f8; background: #0c1724; font: inherit; resize: vertical; }
+.nexus-controls { grid-template-columns: minmax(0,1fr) minmax(150px,.45fr); }
+.nexus-output { white-space: pre-wrap; overflow-wrap: anywhere; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #0c1724; color: #dce6ee; min-height: 100px; font-size: 12px; }
+.nexus-log { max-height: 170px; overflow: auto; color: var(--muted); font-size: 11px; }
