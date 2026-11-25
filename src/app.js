@@ -115,9 +115,8 @@ async function editOpportunity(item) {
   if (amount === null) return;
   const currency = prompt("Currency (USD or SRD)", item.currency);
   if (currency === null) return;
-  const valid = createOpportunity({ ...item, name, stage, amount, currency });
   await runSessionMutation({
-    operation: () => updateUserOpportunity(supabase, item.id, valid),
+    operation: () => updateUserOpportunity(supabase, item.id, createOpportunity({ ...item, name, stage, amount, currency })),
     isCurrent: () => sessionIsCurrent(userId, ticket),
     onSuccess: saved => {
       opportunities = opportunities.map(record => record.id === item.id ? saved : record);
