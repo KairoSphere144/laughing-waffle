@@ -1,0 +1,41 @@
+{
+  "system": "Nexus",
+  "version": "0.1.0",
+  "status": "blueprint",
+  "numbering": { "object_space_start": 1, "zero_reserved": true },
+  "capacity_scaling": { "base": 1, "multiplier": 2, "tiers": [1, 2, 4, 8, 16, 32], "policy": "doubling tiers; capacity changes require validation" },
+  "spaces": [
+    { "space_id": "SPACE-1", "index": 1, "capacity_tier": 1, "objects": [], "status": "unconfigured", "requires_validation": true }
+  ],
+  "states": [
+    { "id": "S0", "name": "Origin / inventory", "exit": "resources and current state recorded", "recovery": "S0" },
+    { "id": "S1", "name": "Discovery / mapping", "exit": "patterns, routes, constraints and gaps mapped", "recovery": "S0" },
+    { "id": "S2", "name": "Foundation", "exit": "core registry, rules and base configuration pass validation", "recovery": "S1" },
+    { "id": "S3", "name": "Architecture", "exit": "interfaces and component boundaries validated", "recovery": "S2" },
+    { "id": "S4", "name": "Identity / access", "exit": "roles and permission boundaries verified", "recovery": "S2" },
+    { "id": "S5", "name": "Infrastructure", "exit": "storage, execution and deployment foundations validated", "recovery": "S3" },
+    { "id": "S6", "name": "Connectivity", "exit": "integrations verified", "recovery": "S3" },
+    { "id": "S7", "name": "Intelligence", "exit": "decision and routing logic tested", "recovery": "S3" },
+    { "id": "S8", "name": "Operations", "exit": "operational acceptance passed", "recovery": "S5" },
+    { "id": "S9", "name": "Resilience", "exit": "security, backup and recovery tests passed", "recovery": "S5" },
+    { "id": "S10", "name": "Expansion", "exit": "new capacity validated without regression", "recovery": "S8" },
+    { "id": "S11", "name": "Adaptive feedback", "exit": "continuous feedback and revision loop established", "recovery": "S1" }
+  ],
+  "routes": [
+    { "from": "S0", "to": "S1", "prerequisites": ["inventory"], "checks": ["inventory reviewed"], "failure_route": "S0" },
+    { "from": "S1", "to": "S2", "prerequisites": ["mapping"], "checks": ["mapping validated"], "failure_route": "S1" },
+    { "from": "S2", "to": "S3", "prerequisites": ["foundation"], "checks": ["foundation checks pass"], "failure_route": "S1" },
+    { "from": "S3", "to": "S4", "prerequisites": ["architecture"], "checks": ["access design review"], "failure_route": "S2" },
+    { "from": "S3", "to": "S5", "prerequisites": ["architecture"], "checks": ["infrastructure tests"], "failure_route": "S3" },
+    { "from": "S5", "to": "S6", "prerequisites": ["infrastructure"], "checks": ["integration tests"], "failure_route": "S3" },
+    { "from": "S3", "to": "S7", "prerequisites": ["architecture"], "checks": ["logic tests"], "failure_route": "S3" },
+    { "from": "S5", "to": "S8", "prerequisites": ["infrastructure", "access"], "checks": ["operational acceptance"], "failure_route": "S5" },
+    { "from": "S5", "to": "S9", "prerequisites": ["infrastructure"], "checks": ["recovery exercise"], "failure_route": "S5" },
+    { "from": "S8", "to": "S10", "prerequisites": ["operations"], "checks": ["expansion regression tests"], "failure_route": "S8" },
+    { "from": "S10", "to": "S11", "prerequisites": ["expansion"], "checks": ["feedback loop tested"], "failure_route": "S1" },
+    { "from": "S11", "to": "S1", "prerequisites": ["feedback"], "checks": ["feedback logged"], "failure_route": "S1" }
+  ],
+  "objects": { "id_format": "OBJ-{space_index}-{sequence}", "sequence_start": 1, "space_assignment_required": true },
+  "secrets": { "repository_policy": "never commit secrets", "store": "protected vault", "references_only": true },
+  "foundation_acceptance": { "configured": false, "checks": ["registry schema", "routes and recovery", "space index from 1", "multiplication tiers", "object model", "secret policy", "tests"], "mark_configured_only_when_all_pass": true }
+}
