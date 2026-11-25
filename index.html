@@ -77,6 +77,23 @@
         </form>
       </article>
     </section>
+    <section class="panel nexus-console" aria-labelledby="nexus-heading">
+      <div class="panel-heading"><div><p class="eyebrow">NEXUS · OBJECT INTERFACE</p><h2 id="nexus-heading">Object operation console</h2></div><span class="count-pill">Demo adapter · Non-actuating</span></div>
+      <p class="subheading">Describe a physical or conceptual object to create a traceable local record. This console currently simulates interaction; it is not connected to hardware or live sensors.</p>
+      <form id="nexus-object-form">
+        <label for="nexus-object-input">Object description / requirement</label>
+        <textarea id="nexus-object-input" maxlength="500" required placeholder="Describe the object, its purpose, identifiers or observations…"></textarea>
+        <button type="submit">Register object</button>
+      </form>
+      <div class="field-row nexus-controls">
+        <div><label for="nexus-object-select">Registered object</label><select id="nexus-object-select" disabled></select></div>
+        <div><label for="nexus-command">Command</label><select id="nexus-command"><option>inspect</option><option>describe</option><option>status</option><option>simulate</option></select></div>
+      </div>
+      <form id="nexus-command-form"><button type="submit">Run command</button></form>
+      <label for="nexus-output">Operation output · provenance included</label><pre id="nexus-output" class="nexus-output" aria-live="polite">Console initializing…</pre>
+      <div><strong>Operation history</strong><ol id="nexus-log" class="nexus-log"></ol></div>
+      <p class="form-feedback">Safety boundary: no real-world control, measurement or actuation is performed. Outputs are labelled simulated.</p>
+    </section>
     <footer><span>KairoSphere · Foundation build</span><span>Authenticated Supabase workspace</span></footer>
   </main>
 </body>
