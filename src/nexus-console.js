@@ -27,7 +27,7 @@ export function processObjectCommand(object, command) {
     timestamp, verification: "Console response generated and internally checked; not a physical observation or execution." };
 }
 
-export function initNexusConsole() {
+export function formatHumanOutput(payload) {\n  if (typeof payload === "string") return payload;\n  if (payload?.operation_id) return [\n    `STATUS: ${String(payload.result_status || "unknown").toUpperCase()}`,\n    `RESULT: ${payload.result || "No result provided."}`,\n    `OBJECT: ${payload.object_id || "n/a"}${payload.command ? ` · COMMAND: ${payload.command}` : ""}`,\n    `SOURCE: ${payload.source || "unspecified"}`,\n    `TIME: ${payload.timestamp || "unspecified"}`,\n    `VERIFICATION: ${payload.verification || "Not verified"}`,\n    `NEXT: ${payload.result_status === "simulated" ? "Connect an authorized real data source or adapter to obtain live evidence." : "Review the evidence and proceed."}`\n  ].join("\\n");\n  if (payload?.created) return `REGISTERED: ${payload.created.object_id}\\nSPACE: ${payload.created.space_id}\\nSTATE: ${payload.created.state}\\nIDENTITY: ${payload.created.identity_status}\\nDESCRIPTION: ${payload.created.description}\\nSAVE: ${payload.persistence}`;\n  return JSON.stringify(payload,null,2);\n}\n\nexport function initNexusConsole() {
   const form = document.querySelector("#nexus-object-form");
   if (!form) return;
   const input = document.querySelector("#nexus-object-input");
@@ -53,7 +53,7 @@ export function initNexusConsole() {
   }
   function active() { return objects.find(object => object.object_id === selector.value); }
   function show(value) {
-    output.textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2);
+    output.textContent = formatHumanOutput(value);
   }
   form.addEventListener("submit", event => {
     event.preventDefault();
