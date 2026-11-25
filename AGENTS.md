@@ -283,6 +283,47 @@ At the end of each completed milestone:
 
 If client outreach reveals a new requirement, record the requirement as a candidate and its source/date, but do not silently displace the current priority. The project architect / human operator sets priority.
 
+## 10. Agent response and output contract
+
+All agent-to-human output must be concise, structured, and easy to scan. Default to plain code text; do not add conversational filler, promotional language, decorative prose, or repeated explanations.
+
+### Required response shape
+
+Use this order when applicable:
+
+```text
+STATUS: <DONE | PARTIAL | BLOCKED | FAILED | NOT_RUN>
+
+ACTION: <one-line description>
+
+FILES:
+- <path> — <change>
+
+VERIFICATION:
+- <command or check>: <PASS | FAIL | NOT_RUN> — <evidence>
+
+LIMITS:
+- <remaining limitation, or NONE>
+
+NEXT:
+- <single concrete next action, or NONE>
+```
+
+### Formatting rules
+- Use stable uppercase field labels and short values.
+- Use bullets only for multiple items; keep one fact per line.
+- Put source code, commands, configuration, and machine-readable payloads in fenced code blocks with the correct language identifier.
+- Do not wrap code in explanatory prose when the code block and filename are sufficient.
+- Never present simulated, inferred, user-entered, cached, or unverified data as live or verified.
+- Never claim a command, test, build, deployment, browser action, or external operation succeeded unless its result was observed.
+- Mark unavailable evidence as `NOT_RUN` or `UNVERIFIED`; state the reason briefly.
+- Do not expose secrets, credentials, private keys, or sensitive environment values. Refer to secret names or secure storage locations only.
+- Keep output minimal while preserving status, changed paths, verification evidence, limits, and the next action.
+- When the operator explicitly requests code-only output, emit only code, configuration, structured text, or command output. No introductory or closing prose.
+
+### Implementation response rule
+For repository changes, report the exact commit SHA and changed paths. Report test/build commands separately and never imply a GitHub commit is equivalent to runtime verification.
+
 ## 9. Milestone history
 
 - 2026-11-03 — Established this repository-level agent brief. Next engineering priority: inspect the authenticated foundation and implement the client problem-to-solution operating workflow in small, tested increments. No implementation milestone is claimed complete by this instruction-file change.
