@@ -186,3 +186,4 @@ if (!supabaseConfigured) {
   });
 }
 render();
+initNexusConsole();
