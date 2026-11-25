@@ -1,3 +1,4 @@
+import { initNexusConsole } from "./nexus-console.js";
 import { createOpportunity, formatMoney, summarizePipeline } from "./domain.js";
 import { createSessionRequestGuard } from "./session-guard.js";
 import { supabase, supabaseConfigured } from "./supabase.js";
