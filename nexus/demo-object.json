@@ -1,0 +1,24 @@
+{
+  "space_id": "SPACE-1",
+  "space_index": 1,
+  "object_id": "OBJ-1-1",
+  "object_type": "demo-object",
+  "identity_status": "identified-unverified",
+  "source": "demo-only",
+  "observed_at": null,
+  "observations": [],
+  "state": "idle",
+  "operations_supported": [
+    "inspect",
+    "describe",
+    "simulate"
+  ],
+  "adapter": "safe-demo-adapter",
+  "physical_actuation": false,
+  "output_example": {
+    "operation_id": "DEMO-001",
+    "result": "Demo object inspection completed locally in the example model.",
+    "result_status": "simulated",
+    "verification": "Not a physical measurement or execution."
+  }
+}
