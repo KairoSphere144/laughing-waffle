@@ -99,3 +99,4 @@ button:disabled { opacity: .65; cursor: wait; }
 .nexus-controls { grid-template-columns: minmax(0,1fr) minmax(150px,.45fr); }
 .nexus-output { white-space: pre-wrap; overflow-wrap: anywhere; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #0c1724; color: #dce6ee; min-height: 100px; font-size: 12px; }
 .nexus-log { max-height: 170px; overflow: auto; color: var(--muted); font-size: 11px; }
+\n/* Compact computer-to-human output */\n.nexus-output { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.65; font-size: 13px; }\n
