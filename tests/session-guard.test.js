@@ -111,3 +111,21 @@ test("applies a successful mutation while the originating user remains active", 
   assert.equal(applied, true);
   assert.deepEqual(savedRecord, { id: "record-a" });
 });
+
+
+test("surfaces validation errors from mutation preparation through the error handler", async () => {
+  const guard = createSessionRequestGuard();
+  const ticket = guard.activate("user-a").ticket;
+  let reportedError;
+  const validationError = new Error("Choose a valid pipeline stage.");
+
+  const applied = await runSessionMutation({
+    operation: () => { throw validationError; },
+    isCurrent: () => guard.isCurrent(ticket),
+    onSuccess: () => assert.fail("invalid input must not save"),
+    onError: error => { reportedError = error; }
+  });
+
+  assert.equal(applied, false);
+  assert.equal(reportedError, validationError);
+});
