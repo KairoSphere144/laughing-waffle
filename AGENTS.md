@@ -330,3 +330,5 @@ For repository changes, report the exact commit SHA and changed paths. Report te
 - 2026-11-05 — Clarified that the Vite + Supabase description is the intended `main` baseline and that agents must inspect the checked-out branch before implementation. Split the problem-to-solution milestone into readiness, intake, solution scope, tasks/milestones, follow-up/delivery, and dashboard stages with separate acceptance criteria. No application feature or deployment is claimed complete by this instruction update.
 
 - 2026-11-27 — Repository cleanup: merged PR #24 and #26 into `laughing-waffle/main`, PR #10 into `KairoSphere122/main`, and PR #3 into `Kairosphere-Foundation/main`. Exact source PR-head CI passed. Closed duplicate/obsolete PRs #7, #8, #15, #21, #22, and #23 in `laughing-waffle`; branches preserved. Live Supabase migration/RLS and Pages deployment remain unverified/blocked as stated above.
+
+- 2026-11-27 — Added the supplier-to-procurement workflow contract to documentation PR #27 with an explicit warning that its historical warehouse foundation is not part of current `main`.
