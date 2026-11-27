@@ -19,6 +19,7 @@
 - [Participant and workforce management](PARTICIPANT_WORKFORCE_MANAGEMENT.md)
 - [Agent Start protocol](agent-bridge/START_PROTOCOL.md)
 - [Controlled cloud bridge contract](bridge/controlled-cloud-bridge.md)
+- [Supplier-to-procurement workflow contract](SUPPLIER_TO_PROCUREMENT_WORKFLOW.md) — proposal only; its inventory base is not yet integrated into current `main`.
 - [Current coordination status](agent-bridge/STATUS.md)
 
 These are proposals, operating instructions, and handoff documents—not evidence that a worker, cloud bridge, workforce module, payment integration, or 24/7 service is deployed. The status document separates verified repository changes from untested live systems.
