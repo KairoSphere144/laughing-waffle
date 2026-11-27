@@ -17,3 +17,21 @@ export function createSessionRequestGuard() {
     }
   };
 }
+
+/**
+ * Run a mutation only while its originating session is still active.
+ * Late success and error responses are ignored after a session change.
+ */
+export async function runSessionMutation({ operation, isCurrent, onSuccess, onError }) {
+  if (!isCurrent()) return false;
+
+  try {
+    const result = await operation();
+    if (!isCurrent()) return false;
+    onSuccess(result);
+    return true;
+  } catch (error) {
+    if (isCurrent()) onError(error);
+    return false;
+  }
+}
