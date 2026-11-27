@@ -15,7 +15,7 @@
 
 - **BLOCKED:** PR #9 opportunity intake is an old divergent branch. No PR-triggered CI run was observed for its exact head; its migration is not applied and live two-user RLS is not verified. Do not merge or apply the migration without a fresh review and target-project confirmation.
 - **BLOCKED:** Pages deployment requires the public build variables `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` to be configured in repository Actions. Do not bypass the fail-closed check or invent values.
-- **BLOCKED:** PR #19 supplier/procurement documentation is based on `feature/warehouse-operations-foundation`, not current `main`; keep it separate until that foundation is reconciled.
+- **REVIEW:** The supplier-to-procurement workflow contract is included in this documentation PR. Its historical warehouse foundation branch is not integrated into current `main`; the document explicitly warns against implementing procurement until that foundation is reconciled.
 - **NOT TESTED:** Live authenticated cross-user/RLS behavior, production Pages deployment, and any live database migration.
 - **NOT TESTED:** Post-merge checks on the merge commits; GitHub status lookup returned no status records for those commits. Source PR-head checks passed as listed above.
 
