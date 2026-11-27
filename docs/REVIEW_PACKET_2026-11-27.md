@@ -18,6 +18,7 @@
 - [24/7 operating architecture](OPERATING_ARCHITECTURE.md)
 - [Participant and workforce management](PARTICIPANT_WORKFORCE_MANAGEMENT.md)
 - [Agent Start protocol](agent-bridge/START_PROTOCOL.md)
+- [Historical agent build log](agent-bridge/BUILD_LOG.md)
 - [Controlled cloud bridge contract](bridge/controlled-cloud-bridge.md)
 - [Supplier-to-procurement workflow contract](SUPPLIER_TO_PROCUREMENT_WORKFLOW.md) — proposal only; its inventory base is not yet integrated into current `main`.
 - [Current coordination status](agent-bridge/STATUS.md)
